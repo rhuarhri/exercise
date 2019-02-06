@@ -1,5 +1,6 @@
 package com.example.rhuarhri.androidexerciseapp;
 
+/*
 import android.arch.persistence.room.Room;
 import android.content.Context;
 
@@ -84,3 +85,4 @@ public class appTimer {
 
     }
 }
+*/

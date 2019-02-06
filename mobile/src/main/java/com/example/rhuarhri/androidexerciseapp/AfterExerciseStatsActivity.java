@@ -11,7 +11,7 @@ public class AfterExerciseStatsActivity extends AppCompatActivity {
     Button statsBTN;
     Button homeBTN;
 
-    appTimer recordTime;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +39,9 @@ public class AfterExerciseStatsActivity extends AppCompatActivity {
             }
         });
 
-        recordTime = new appTimer(this);
-        recordTime.startTimer();
+
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        recordTime.stopTimer("after");
-    }
 }
 
 

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.wearable.activity.WearableActivity;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class StartActivity extends WearableActivity {
@@ -40,4 +42,6 @@ public class StartActivity extends WearableActivity {
 
         startActivity(goTo);
     }
+
+
 }

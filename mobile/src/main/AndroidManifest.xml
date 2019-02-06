@@ -18,10 +18,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AfterExerciseStats" />
+        <activity android:name=".AfterExerciseStatsActivity" />
         <activity android:name=".ChooseExerciseActivity" />
         <activity android:name=".completeActivity" />
-        <activity android:name=".ExerciseActivity"></activity>
+        <activity android:name=".ExerciseActivity" />
+        <activity android:name=".HomeActivity" />
+        <activity android:name=".SetupActivity" />
+        <activity android:name=".StartActivity" />
+        <!--<activity android:name=".StartActivity$StartExerciseActivity" />-->
+        <activity android:name=".StartExerciseActivity" />
+        <activity android:name=".OverStatsActivity"></activity>
     </application>
 
 </manifest>

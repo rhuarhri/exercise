@@ -15,7 +15,7 @@ public class ChooseExerciseActivity extends AppCompatActivity {
 
     Button startBTN;
 
-    appTimer recordTime;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +40,7 @@ public class ChooseExerciseActivity extends AppCompatActivity {
             }
         });
 
-        recordTime = new appTimer(this);
-        recordTime.startTimer();
+
     }
 
     private void setupRecyclerView()
@@ -56,11 +55,6 @@ public class ChooseExerciseActivity extends AppCompatActivity {
         exerciseList.setAdapter(exerciseListAdapter);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
 
-        recordTime.stopTimer("choose");
-    }
 
 }

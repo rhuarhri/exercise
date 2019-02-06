@@ -12,7 +12,7 @@ public class completeActivity extends AppCompatActivity {
     Button homeBTN;
     Button statsBTN;
 
-    appTimer recordTime;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +23,7 @@ public class completeActivity extends AppCompatActivity {
         exitBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent TestCompleteScreen = new Intent(getApplicationContext(), TestCompleteActivity.class);
 
-                startActivity(TestCompleteScreen);
             }
         });
 
@@ -51,14 +49,5 @@ public class completeActivity extends AppCompatActivity {
             }
         });
 
-        recordTime = new appTimer(this);
-        recordTime.startTimer();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        recordTime.stopTimer("complete");
     }
 }

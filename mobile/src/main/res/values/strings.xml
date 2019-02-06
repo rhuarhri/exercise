@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">watch fitness</string>
+
+    <string-array name="devices">
+        <item>device1</item>
+        <item>device2</item>
+        <item>device3</item>
+        <item>device4</item>
+    </string-array>
 </resources>
