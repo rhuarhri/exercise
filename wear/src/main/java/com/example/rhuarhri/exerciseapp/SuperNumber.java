@@ -2,7 +2,7 @@ package com.example.rhuarhri.exerciseapp;
 
 /**
  * Created by N on 6/21/2015.
- */
+ *
 public class SuperNumber {
     private double val;
     public SuperNumber(double input) {
@@ -23,7 +23,7 @@ public class SuperNumber {
             val = input;
         return val;
     }
-    /* Now we have some static functions that add on to the math class */
+    /* Now we have some static functions that add on to the math class *
     public static double setWithinRange(double min, double input, double max) {
         if(input < min)
             return min;
@@ -33,3 +33,4 @@ public class SuperNumber {
             return input;
     }
 }
+*/

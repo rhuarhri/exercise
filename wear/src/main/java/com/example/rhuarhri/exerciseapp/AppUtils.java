@@ -1,5 +1,5 @@
 package com.example.rhuarhri.exerciseapp;
-
+/*
 import android.app.UiModeManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -7,7 +7,7 @@ import android.content.res.Configuration;
 
 /**
  * Created by N on 3/4/2015.
- */
+ *
 public abstract class AppUtils {
     public static boolean isWearEnabled(Context mContext) {
         PackageManager pm = mContext.getPackageManager();
@@ -26,3 +26,4 @@ public abstract class AppUtils {
         return uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION;
     }
 }
+*/

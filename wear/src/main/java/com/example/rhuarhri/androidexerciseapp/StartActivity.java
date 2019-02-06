@@ -1,6 +1,6 @@
-package com.example.rhuarhri.exerciseapp;
+package com.example.rhuarhri.androidexerciseapp;
 
-/*
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -41,4 +41,3 @@ public class StartActivity extends WearableActivity {
         startActivity(goTo);
     }
 }
-*/

@@ -1,5 +1,5 @@
 package com.example.rhuarhri.exerciseapp;
-
+/*
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -43,7 +43,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
     Type the follwing into the command prompt
     adb forward tcp:4444 localabstract:/adb-hub
     adb connect localhost:4444
-     */
+     *
 
     private TextView mTextView;
 
@@ -70,7 +70,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watch);
 
-        /*sensor setup*/
+        /*sensor setup*
         healthSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         heartRateSensor = healthSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
@@ -167,7 +167,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
                             bestNodeId, "test", bigInt.toByteArray());
                 }
             }
-        });*/
+        });*
 
         Wearable.getMessageClient(this).addListener(new MessageClient.OnMessageReceivedListener() {
             @Override
@@ -204,7 +204,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
             Wearable.getMessageClient(getApplicationContext()).sendMessage(
                     bestNodeId, "test", bigInt.toByteArray());
 
-        }*/
+        }*
 
 
 
@@ -361,5 +361,6 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         putDataMapReq.getDataMap().putInt(COUNT_KEY, currentPerformance);
         PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
         Task<DataItem> putDataTask = mDataClient.putDataItem(putDataReq);
-    }*/
+    }*
 }
+*/

@@ -22,7 +22,7 @@ import java.util.Set;
 
 /**
  * Created by N on 5/29/2015.
- */
+ *
 public class ConnectionUtils {
 
     /*
@@ -40,7 +40,7 @@ public class ConnectionUtils {
             </string-array>
         </resources>
 
-     */
+     *
     public static class NodeManager {
         private String transcriptionNodeId = null;
         private GoogleApiClient mGoogleApiClient;
@@ -171,3 +171,4 @@ public class ConnectionUtils {
 
 
 }
+*/

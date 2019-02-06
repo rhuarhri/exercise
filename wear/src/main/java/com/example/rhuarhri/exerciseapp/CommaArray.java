@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 /**
  * Created by N on 5/31/2015.
- */
+ *
 public class CommaArray {
 
     private String source;
@@ -93,7 +93,7 @@ public class CommaArray {
     /**
      * Resizes the array, taking the last n items
      * @param spots The final max size of the array
-     */
+     *
     public void truncate(int spots) {
         if(spots < array.size()) {
             int trimSize = spots - array.size();
@@ -120,3 +120,4 @@ public class CommaArray {
         return template;
     }
 }
+*/

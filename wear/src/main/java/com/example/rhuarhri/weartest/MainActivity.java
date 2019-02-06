@@ -1,5 +1,5 @@
 package com.example.rhuarhri.weartest;
-
+/*
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.widget.TextView;
@@ -130,4 +130,4 @@ public class MainActivity extends WearableActivity {
             }
         }
     }
-}
+}*/

@@ -1,4 +1,4 @@
-package com.example.rhuarhri.exerciseapp;
+package com.example.rhuarhri.androidexerciseapp;
 
 import android.Manifest;
 import android.content.Context;
