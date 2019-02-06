@@ -1,5 +1,5 @@
 package com.example.rhuarhri.exerciseapp;
-
+/*
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;

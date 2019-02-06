@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OverStatsActivity">
+
+</android.support.constraint.ConstraintLayout>-->
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".OverStatsActivity">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="340dp"
+        android:layout_height="340dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/coloured_human_figure" />
+
+    <Button
+        android:id="@+id/homeBTN"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="36dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/colorSecond"
+        android:foreground="@drawable/home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/nowWeightPB"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:max="100"
+        android:progress="50"
+        app:layout_constraintBottom_toTopOf="@+id/wasTXT"
+        app:layout_constraintStart_toStartOf="@+id/wasWeightPB" />
+
+    <ProgressBar
+        android:id="@+id/wasWeightPB"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:max="100"
+        android:progress="90"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/weightTXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Overall weight loss"
+        android:textColor="@color/colorText"
+        app:layout_constraintBottom_toTopOf="@+id/nowTXT"
+        app:layout_constraintStart_toStartOf="@+id/nowWeightPB" />
+
+    <TextView
+        android:id="@+id/wasTXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Was"
+        android:textColor="@color/colorText"
+        app:layout_constraintBottom_toTopOf="@+id/wasWeightPB"
+        app:layout_constraintStart_toStartOf="@+id/wasWeightPB" />
+
+    <TextView
+        android:id="@+id/nowTXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Now"
+        android:textColor="@color/colorText"
+        app:layout_constraintBottom_toTopOf="@+id/nowWeightPB"
+        app:layout_constraintStart_toStartOf="@+id/nowWeightPB" />
+</android.support.constraint.ConstraintLayout>

@@ -18,6 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AfterExerciseStats" />
+        <activity android:name=".ChooseExerciseActivity" />
+        <activity android:name=".completeActivity" />
+        <activity android:name=".ExerciseActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,5 @@
 package com.example.rhuarhri.exerciseapp;
-
+/*
 import android.util.Log;
 
 import java.util.ArrayList;

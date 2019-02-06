@@ -11,4 +11,7 @@
     <color name="colorSecond">#ffd600</color>
     <color name="colorSecondDark">#c7a500</color>
     <color name="colorSecondLight">#ffff52</color>
+
+    <color name="colorText">#ffffff</color>
+
 </resources>

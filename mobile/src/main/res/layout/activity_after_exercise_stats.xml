@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AfterExerciseStatsActivity">
+
+</android.support.constraint.ConstraintLayout>-->
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".AfterExerciseStatsActivity">
+
+    <ImageView
+        android:id="@+id/progressIV"
+        android:layout_width="318dp"
+        android:layout_height="377dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/coloured_human_figure" />
+
+    <TextView
+        android:id="@+id/TitleTXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="Results"
+        android:textColor="@color/colorText"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/avgHeartRateTXT"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressIV" />
+
+    <TextView
+        android:id="@+id/avgHeartRateTXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="120"
+        android:textColor="@color/colorText"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/caloriesBurnedTXT"
+        app:layout_constraintStart_toStartOf="@+id/TitleTXT"
+        app:layout_constraintTop_toBottomOf="@+id/TitleTXT" />
+
+    <TextView
+        android:id="@+id/caloriesBurnedTXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="100"
+        android:textColor="@color/colorText"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/avgHeartRateTXT"
+        app:layout_constraintTop_toBottomOf="@+id/avgHeartRateTXT" />
+
+    <Button
+        android:id="@+id/statsBTN"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorSecond"
+        android:foreground="@drawable/stats"
+        app:layout_constraintBottom_toTopOf="@+id/homeBTN"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressIV" />
+
+    <Button
+        android:id="@+id/homeBTN"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorSecond"
+        android:foreground="@drawable/home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/statsBTN"
+        app:layout_constraintTop_toBottomOf="@+id/statsBTN" />
+
+    <ImageView
+        android:id="@+id/heartIV"
+        android:layout_width="60dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/avgHeartRateTXT"
+        app:layout_constraintStart_toEndOf="@+id/avgHeartRateTXT"
+        app:layout_constraintTop_toTopOf="@+id/avgHeartRateTXT"
+        app:srcCompat="@drawable/heart" />
+
+    <ImageView
+        android:id="@+id/calBurnedIV"
+        android:layout_width="60dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/caloriesBurnedTXT"
+        app:layout_constraintStart_toEndOf="@+id/caloriesBurnedTXT"
+        app:layout_constraintTop_toTopOf="@+id/caloriesBurnedTXT"
+        app:srcCompat="@drawable/fire" />
+</android.support.constraint.ConstraintLayout>

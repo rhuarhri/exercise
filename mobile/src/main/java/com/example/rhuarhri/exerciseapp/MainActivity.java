@@ -1,5 +1,5 @@
 package com.example.rhuarhri.exerciseapp;
-
+/*
 import android.service.carrier.CarrierMessagingService;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements
                     public void onSuccess(CapabilityInfo capabilityInfo) {
                         nodes = capabilityInfo.getNodes();
                     }
-                });*/
+                });*
 
 
 
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements
         Wearable.getCapabilityClient(context).addListener(
                 capabilityListener,
                 VOICE_TRANSCRIPTION_CAPABILITY_NAME);
-    }*/
+    }*
 
     private String pickBestNodeId(Set<Node> nodes) {
         String bestNodeId = null;
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements
                         }
                     }
 
-                });*/
+                });*
 
 /*
     @Override

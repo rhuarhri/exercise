@@ -1,5 +1,5 @@
 package com.example.rhuarhri.exerciseapp;
-
+/*
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
