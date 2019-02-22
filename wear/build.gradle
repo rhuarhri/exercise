@@ -26,4 +26,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:wear:27.1.1'
     compileOnly 'com.google.android.wearable:wearable:2.4.0'
+    implementation 'android.arch.work:work-runtime:1.0.0-alpha13'
+
 }
+

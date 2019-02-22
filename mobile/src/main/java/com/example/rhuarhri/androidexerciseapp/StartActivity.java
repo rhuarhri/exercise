@@ -49,7 +49,7 @@ public class StartActivity extends AppCompatActivity {
 
     private void goToSetupScreen()
     {
-        Intent setupScreen = new Intent(getApplicationContext(), SetupActivity.class);
+        Intent setupScreen = new Intent(getApplicationContext(), HomeActivity.class);
 
         startActivity(setupScreen);
     }

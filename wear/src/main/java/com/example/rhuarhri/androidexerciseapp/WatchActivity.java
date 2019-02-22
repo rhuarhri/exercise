@@ -20,6 +20,12 @@ import com.google.android.gms.common.ConnectionResult;
 
 import com.google.android.gms.wearable.MessageEvent;
 
+import java.util.concurrent.TimeUnit;
+
+import androidx.work.Data;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
 
 public class WatchActivity extends WearableActivity implements SensorEventListener{
 
@@ -41,6 +47,8 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
 
     private float currentHeartRate;
     private float currentMovement;
+    private int currentPerformanceLevel;
+    private boolean okToSend;
 
 
 
@@ -57,7 +65,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         accelerometer = healthSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         healthSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        healthSensorManager.registerListener(this, heartRateSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        healthSensorManager.registerListener(this, heartRateSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
 
         // Enables Always-on
@@ -72,9 +80,25 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         pauseBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //new MessageHandler(getApplicationContext(), WatchActivity.this, "hi from watch").start();
+
+
+
+                if (okToSend == true)
+                {
+
+                    new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
+                }
 
             }
         });
+
+        sendPeriodically sendTimer = new sendPeriodically();
+        sendTimer.start();
+
+
+
+
 
 
 
@@ -97,7 +121,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         else
         {
             currentHeartRate = sensorEvent.values[0];
-            //heartRateTXT.setText("" + currentHeartRate);
+            heartRateTXT.setText("" + currentHeartRate);
         }
 
         calculatePerformance(currentHeartRate, currentMovement);
@@ -117,61 +141,84 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
 
             if(heartRate < 80)
             {
+                currentPerformanceLevel = 0;
                 //performanceLevelTXT.setText("0");
                 //sendPerformance(0);
+                new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
+
             }
             else if (heartRate > 80 && heartRate < 100)
             {
+                currentPerformanceLevel = 1;
                 //performanceLevelTXT.setText("1");
                 //sendPerformance(1);
+                new MessageHandler(getApplicationContext(), WatchActivity.this, "1").start();
             }
             else if (heartRate > 100 && heartRate < 120)
             {
+                currentPerformanceLevel = 2;
                 //performanceLevelTXT.setText("2");
                 //sendPerformance(2);
+                new MessageHandler(getApplicationContext(), WatchActivity.this, "2").start();
             }
             else if (heartRate > 120 && heartRate < 140)
             {
+                currentPerformanceLevel = 3;
                 //performanceLevelTXT.setText("3");
                 //sendPerformance(3);
+                new MessageHandler(getApplicationContext(), WatchActivity.this, "3").start();
             }
             else if (heartRate > 140 && heartRate < 160)
             {
+                currentPerformanceLevel = 4;
                 //performanceLevelTXT.setText("4");
                 //sendPerformance(4);
+                new MessageHandler(getApplicationContext(), WatchActivity.this, "4").start();
             }
             else if (heartRate > 160 && heartRate < 180)
             {
+                currentPerformanceLevel = 5;
                 //performanceLevelTXT.setText("5");
                 //sendPerformance(5);
+                new MessageHandler(getApplicationContext(), WatchActivity.this, "5").start();
             }
             else if (heartRate > 180 && heartRate < 200)
             {
+                currentPerformanceLevel = 6;
                 //performanceLevelTXT.setText("6");
                 //sendPerformance(6);
+                new MessageHandler(getApplicationContext(), WatchActivity.this, "6").start();
             }
             else if (heartRate > 200 && heartRate < 220)
             {
+                currentPerformanceLevel = 7;
                 //performanceLevelTXT.setText("7");
                 //sendPerformance(7);
+                new MessageHandler(getApplicationContext(), WatchActivity.this, "7").start();
             }
             else if (heartRate > 220 && heartRate < 240)
             {
+                currentPerformanceLevel = 8;
                 //performanceLevelTXT.setText("8");
                 //sendPerformance(8);
+                new MessageHandler(getApplicationContext(), WatchActivity.this, "8").start();
             }
             else if (heartRate > 240)
             {
+                currentPerformanceLevel = 9;
                 //performanceLevelTXT.setText("9");
                 //sendPerformance(9);
+                new MessageHandler(getApplicationContext(), WatchActivity.this, "9").start();
             }
 
         }
         else
         {
+            currentPerformanceLevel = 0;
             //performanceLevelTXT.setText("0");
             //performanceLevel = 0;
             //sendPerformance(0);
+            new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
         }
 
     }
@@ -187,6 +234,35 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         else{
             return false;
         }
+    }
+
+    public class sendPeriodically extends Thread
+    {
+
+
+        public void run()
+        {
+            while (true)
+            {
+                if(okToSend == true)
+                {
+                    okToSend = false;
+                }
+                else
+                {
+                    okToSend = true;
+                }
+
+
+
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
 

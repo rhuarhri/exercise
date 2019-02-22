@@ -8,4 +8,5 @@
     <string name="title_activity_watch">WatchActivity</string>
     <string name="title_activity_start">StartActivity</string>
     <string name="title_activity_permission">PermissionActivity</string>
+    <string name="path">/my_path</string>
 </resources>

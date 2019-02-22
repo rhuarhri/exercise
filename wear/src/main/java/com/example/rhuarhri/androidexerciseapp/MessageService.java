@@ -14,7 +14,7 @@ public class MessageService extends WearableListenerService {
 
 //If the message’s path equals "/my_path"...//
 
-        if (messageEvent.getPath().equals("/my_path")) {
+        if (messageEvent.getPath().equals(getApplicationContext().getString(R.string.path))) {
 
 //...retrieve the message//
 

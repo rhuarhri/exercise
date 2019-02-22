@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">watch fitness</string>
+    <string name="path">/my_path</string>
+
 
     <string-array name="devices">
         <item>device1</item>
