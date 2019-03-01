@@ -1,5 +1,6 @@
 package com.example.rhuarhri.androidexerciseapp;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,10 +9,37 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.rhuarhri.androidexerciseapp.externalDatabase.exercise;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapter.MyViewHolder> {
 
-    String[] exercises = {"exercise1", "exercise2", "exercise3", "exercise4", "exercise5", "exercise6",
-            "exercise7", "exercise8", "exercise9", "exercise10"};
+
+
+    List<String> FoundNames;
+    List<String> FoundType;
+    Context context;
+
+
+    public recyclerViewAdapter (List<exercise> ExerciseList, Context appContext)
+    {
+        List<exercise> allExercises = ExerciseList;
+
+        FoundNames = new ArrayList<String>();
+        FoundType = new ArrayList<String>();
+
+        context = appContext;
+
+        for (int i = 0; i < allExercises.size(); i++)
+        {
+            FoundNames.add(allExercises.get(i).getName());
+            FoundType.add(allExercises.get(i).getType());
+        }
+
+    }
+
 
     public static class MyViewHolder extends RecyclerView.ViewHolder
     {
@@ -43,13 +71,24 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull recyclerViewAdapter.MyViewHolder holder, int position) {
 
-        holder.exerciseTXT.setText("" + exercises[position]);
-        holder.typeIV.setImageResource(R.drawable.arm);
+        holder.exerciseTXT.setText("" + FoundNames.get(position));
+
+        if (FoundType.get(position) == "arm") {
+            holder.typeIV.setImageResource(R.drawable.arm);
+        }
+        else if (FoundType.get(position) == "leg")
+        {
+            holder.typeIV.setImageResource(R.drawable.leg);
+        }
+        else
+        {
+            holder.typeIV.setImageResource(R.drawable.chest);
+        }
 
     }
 
     @Override
     public int getItemCount() {
-        return exercises.length;
+        return FoundNames.size();
     }
 }

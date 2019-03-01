@@ -1,9 +1,10 @@
 package com.example.rhuarhri.androidexerciseapp.internalDatabase;
 
 import android.arch.persistence.room.Database;
+import android.arch.persistence.room.RoomDatabase;
 
-@Database(entities = {storedUserPerformance.class}, version = 1)
-public abstract class performanceDBAccess {
+@Database(entities = {storedUserPerformance.class}, version = 1, exportSchema = false)
+public abstract class performanceDBAccess extends RoomDatabase{
 
-    public abstract UserWeightInterface storedPerformance();
+    public abstract UserPerformanceInterface storedPerformance();
 }

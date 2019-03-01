@@ -38,6 +38,9 @@ dependencies {
 
     annotationProcessor "android.arch.persistence.room:compiler:$rootProject.archRoomVersion"
 
+    implementation "android.arch.work:work-runtime:1.0.0-rc02"
+
+
 }
 
 apply plugin: 'com.google.gms.google-services'

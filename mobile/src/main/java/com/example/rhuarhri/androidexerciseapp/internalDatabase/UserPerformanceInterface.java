@@ -1,11 +1,13 @@
 package com.example.rhuarhri.androidexerciseapp.internalDatabase;
 
+import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+@Dao
 public interface UserPerformanceInterface {
 
     @Update
@@ -35,6 +37,9 @@ public interface UserPerformanceInterface {
 
     @Query("SELECT chest FROM storedUserPerformance")
     List<Integer> getchestPerformance();
+
+    @Query("SELECT duration FROM storedUserPerformance")
+    List<Long> getStartTime();
 
 
 

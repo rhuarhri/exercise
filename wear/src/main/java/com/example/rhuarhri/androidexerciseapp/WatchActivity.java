@@ -35,7 +35,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
     adb connect localhost:4444
      */
 
-    private TextView mTextView;
+    boolean paused = false;
 
     TextView heartRateTXT;
     //TextView performanceLevelTXT;
@@ -80,28 +80,20 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         pauseBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //new MessageHandler(getApplicationContext(), WatchActivity.this, "hi from watch").start();
 
-
-
-                if (okToSend == true)
+                if (paused == false)
                 {
-
+                    paused = true;
+                    pauseBTN.setBackgroundResource(R.drawable.play);
                     new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
+                }
+                else {
+                    paused = false;
+                    pauseBTN.setBackgroundResource(R.drawable.pause);
                 }
 
             }
         });
-
-        sendPeriodically sendTimer = new sendPeriodically();
-        sendTimer.start();
-
-
-
-
-
-
-
 
     }
 
@@ -124,7 +116,12 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
             heartRateTXT.setText("" + currentHeartRate);
         }
 
-        calculatePerformance(currentHeartRate, currentMovement);
+        if (paused == false) {
+            calculatePerformance(currentHeartRate, currentMovement);
+        }
+        else{
+
+        }
 
     }
 
@@ -142,72 +139,62 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
             if(heartRate < 80)
             {
                 currentPerformanceLevel = 0;
-                //performanceLevelTXT.setText("0");
-                //sendPerformance(0);
+
                 new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
 
             }
             else if (heartRate > 80 && heartRate < 100)
             {
                 currentPerformanceLevel = 1;
-                //performanceLevelTXT.setText("1");
-                //sendPerformance(1);
+
                 new MessageHandler(getApplicationContext(), WatchActivity.this, "1").start();
             }
             else if (heartRate > 100 && heartRate < 120)
             {
                 currentPerformanceLevel = 2;
-                //performanceLevelTXT.setText("2");
-                //sendPerformance(2);
+
                 new MessageHandler(getApplicationContext(), WatchActivity.this, "2").start();
             }
             else if (heartRate > 120 && heartRate < 140)
             {
                 currentPerformanceLevel = 3;
-                //performanceLevelTXT.setText("3");
-                //sendPerformance(3);
+
                 new MessageHandler(getApplicationContext(), WatchActivity.this, "3").start();
             }
             else if (heartRate > 140 && heartRate < 160)
             {
                 currentPerformanceLevel = 4;
-                //performanceLevelTXT.setText("4");
-                //sendPerformance(4);
+
                 new MessageHandler(getApplicationContext(), WatchActivity.this, "4").start();
             }
             else if (heartRate > 160 && heartRate < 180)
             {
                 currentPerformanceLevel = 5;
-                //performanceLevelTXT.setText("5");
-                //sendPerformance(5);
+
                 new MessageHandler(getApplicationContext(), WatchActivity.this, "5").start();
             }
             else if (heartRate > 180 && heartRate < 200)
             {
                 currentPerformanceLevel = 6;
-                //performanceLevelTXT.setText("6");
-                //sendPerformance(6);
+
                 new MessageHandler(getApplicationContext(), WatchActivity.this, "6").start();
             }
             else if (heartRate > 200 && heartRate < 220)
             {
                 currentPerformanceLevel = 7;
-                //performanceLevelTXT.setText("7");
-                //sendPerformance(7);
+
                 new MessageHandler(getApplicationContext(), WatchActivity.this, "7").start();
             }
             else if (heartRate > 220 && heartRate < 240)
             {
                 currentPerformanceLevel = 8;
-                //performanceLevelTXT.setText("8");
-                //sendPerformance(8);
+
                 new MessageHandler(getApplicationContext(), WatchActivity.this, "8").start();
             }
             else if (heartRate > 240)
             {
                 currentPerformanceLevel = 9;
-                //performanceLevelTXT.setText("9");
-                //sendPerformance(9);
+
                 new MessageHandler(getApplicationContext(), WatchActivity.this, "9").start();
             }
 
@@ -215,9 +202,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         else
         {
             currentPerformanceLevel = 0;
-            //performanceLevelTXT.setText("0");
-            //performanceLevel = 0;
-            //sendPerformance(0);
+
             new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
         }
 
@@ -236,36 +221,5 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         }
     }
 
-    public class sendPeriodically extends Thread
-    {
 
-
-        public void run()
-        {
-            while (true)
-            {
-                if(okToSend == true)
-                {
-                    okToSend = false;
-                }
-                else
-                {
-                    okToSend = true;
-                }
-
-
-
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-    }
-
-
-    /*
-    */
 }

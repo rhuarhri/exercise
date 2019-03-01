@@ -9,7 +9,7 @@ provided by
 android room library part of the android jet pack library collection
 */
 
-@Database(entities = {storedUserWeight.class}, version = 1)
+@Database(entities = {storedUserWeight.class}, version = 1, exportSchema = false)
 public abstract class weightDBAccess extends RoomDatabase {
 
     public abstract UserWeightInterface storedWeight();

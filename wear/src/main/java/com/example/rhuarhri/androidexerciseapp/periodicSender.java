@@ -1,5 +1,5 @@
 package com.example.rhuarhri.androidexerciseapp;
-
+/*
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -29,3 +29,4 @@ public class periodicSender extends Worker {
         return Worker.Result.success();
     }
 }
+*/

@@ -56,7 +56,7 @@
 
     <fragment
         android:id="@+id/pauseFRG"
-        android:name="com.example.rhuarhri.fitnessapp.exercisePause"
+        android:name="com.example.rhuarhri.androidexerciseapp.exercisePause"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="50dp"

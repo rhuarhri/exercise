@@ -23,6 +23,8 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
+    int performance = 0;
+
     Button talkbutton;
     TextView textview;
     protected Handler myHandler;
@@ -57,7 +59,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void messageText(String newinfo) {
         if (newinfo.compareTo("") != 0) {
-            textview.append("\n" + newinfo);
+
+            performance = Integer.parseInt(newinfo);
+            //textview.append("\n" + newinfo);
+
+            textview.setText(""+ performance);
         }
     }
 
@@ -82,7 +88,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            textview.setText(message);
+            performance = Integer.parseInt(message);
+
+            //textview.append("\n" + performance);
+
+            textview.setText("" + performance);
 
         }
     }
@@ -95,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
 
         //new NewThread("/my_path", message).start();
         //new MessageHandler(getApplicationContext(), MainActivity.this,  message).start();
+
+
 
 
     }

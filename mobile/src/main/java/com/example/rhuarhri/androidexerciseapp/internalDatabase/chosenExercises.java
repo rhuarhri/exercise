@@ -18,8 +18,14 @@ public class chosenExercises {
     @ColumnInfo(name = "image")
     String imageName;
 
-    @ColumnInfo(name = "performance")
-    String RequiredPerformanceLevel;
+    @ColumnInfo(name = "min")
+    int MinimumPerformanceLevel;
+
+    @ColumnInfo(name = "max")
+    int MaximumPerformanceLevel;
+
+    @ColumnInfo(name = "amount")
+    int amount;
 
     @NonNull
     public int getId() {
@@ -34,8 +40,16 @@ public class chosenExercises {
         return imageName;
     }
 
-    public String getRequiredPerformanceLevel() {
-        return RequiredPerformanceLevel;
+    public int getMinimumPerformanceLevel() {
+        return MinimumPerformanceLevel;
+    }
+
+    public int getMaximumPerformanceLevel() {
+        return MaximumPerformanceLevel;
+    }
+
+    public int getAmount() {
+        return amount;
     }
 
     public void setId(@NonNull int id) {
@@ -50,7 +64,15 @@ public class chosenExercises {
         this.imageName = imageName;
     }
 
-    public void setRequiredPerformanceLevel(String requiredPerformanceLevel) {
-        RequiredPerformanceLevel = requiredPerformanceLevel;
+    public void setMinimumPerformanceLevel(int minimumPerformanceLevel) {
+        MinimumPerformanceLevel = minimumPerformanceLevel;
+    }
+
+    public void setMaximumPerformanceLevel(int maximumPerformanceLevel) {
+        MaximumPerformanceLevel = maximumPerformanceLevel;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }
