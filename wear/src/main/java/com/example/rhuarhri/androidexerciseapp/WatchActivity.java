@@ -47,7 +47,8 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
 
     private float currentHeartRate;
     private float currentMovement;
-    private int currentPerformanceLevel;
+    //public for testing
+    public int currentPerformanceLevel;
     private boolean okToSend;
 
 
@@ -90,6 +91,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
                 else {
                     paused = false;
                     pauseBTN.setBackgroundResource(R.drawable.pause);
+                    new MessageHandler(getApplicationContext(), WatchActivity.this, "1").start();
                 }
 
             }
@@ -117,7 +119,10 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         }
 
         if (paused == false) {
-            calculatePerformance(currentHeartRate, currentMovement);
+
+            new MessageHandler(getApplicationContext(), WatchActivity.this,
+                    "" + calculatePerformance(currentHeartRate, currentMovement)).start();
+
         }
         else{
 
@@ -130,7 +135,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
 
     }
 
-    private void calculatePerformance(float heartRate, float movement)
+    public int calculatePerformance(float heartRate, float movement)
     {
 
 
@@ -138,73 +143,75 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
 
             if(heartRate < 80)
             {
-                currentPerformanceLevel = 0;
+                return 0;
 
-                new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
+                //new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
 
             }
             else if (heartRate > 80 && heartRate < 100)
             {
-                currentPerformanceLevel = 1;
+                return 1;
 
-                new MessageHandler(getApplicationContext(), WatchActivity.this, "1").start();
+                //new MessageHandler(getApplicationContext(), WatchActivity.this, "1").start();
             }
             else if (heartRate > 100 && heartRate < 120)
             {
-                currentPerformanceLevel = 2;
+                return 2;
 
-                new MessageHandler(getApplicationContext(), WatchActivity.this, "2").start();
+                //new MessageHandler(getApplicationContext(), WatchActivity.this, "2").start();
             }
             else if (heartRate > 120 && heartRate < 140)
             {
-                currentPerformanceLevel = 3;
+                return 3;
 
-                new MessageHandler(getApplicationContext(), WatchActivity.this, "3").start();
+                //new MessageHandler(getApplicationContext(), WatchActivity.this, "3").start();
             }
             else if (heartRate > 140 && heartRate < 160)
             {
-                currentPerformanceLevel = 4;
+                return 4;
 
-                new MessageHandler(getApplicationContext(), WatchActivity.this, "4").start();
+                //new MessageHandler(getApplicationContext(), WatchActivity.this, "4").start();
             }
             else if (heartRate > 160 && heartRate < 180)
             {
-                currentPerformanceLevel = 5;
+                return 5;
 
-                new MessageHandler(getApplicationContext(), WatchActivity.this, "5").start();
+                //new MessageHandler(getApplicationContext(), WatchActivity.this, "5").start();
             }
             else if (heartRate > 180 && heartRate < 200)
             {
-                currentPerformanceLevel = 6;
+                return 6;
 
-                new MessageHandler(getApplicationContext(), WatchActivity.this, "6").start();
+                //new MessageHandler(getApplicationContext(), WatchActivity.this, "6").start();
             }
             else if (heartRate > 200 && heartRate < 220)
             {
-                currentPerformanceLevel = 7;
+                return 7;
 
-                new MessageHandler(getApplicationContext(), WatchActivity.this, "7").start();
+                //new MessageHandler(getApplicationContext(), WatchActivity.this, "7").start();
             }
             else if (heartRate > 220 && heartRate < 240)
             {
-                currentPerformanceLevel = 8;
+                return 8;
 
-                new MessageHandler(getApplicationContext(), WatchActivity.this, "8").start();
+                //new MessageHandler(getApplicationContext(), WatchActivity.this, "8").start();
             }
             else if (heartRate > 240)
             {
-                currentPerformanceLevel = 9;
+                return 9;
 
-                new MessageHandler(getApplicationContext(), WatchActivity.this, "9").start();
+                //new MessageHandler(getApplicationContext(), WatchActivity.this, "9").start();
             }
 
         }
         else
         {
-            currentPerformanceLevel = 0;
+            return 0;
 
-            new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
+            //new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
         }
+
+        return 0;
 
     }
 

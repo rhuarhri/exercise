@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,6 +46,9 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
     {
         public TextView exerciseTXT;
         public ImageView typeIV;
+        public TextView amountTXT;
+        public Button plusBTN;
+        public Button minusBTN;
 
         public MyViewHolder(View v)
         {
@@ -52,6 +56,9 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
 
             exerciseTXT = (TextView) v.findViewById(R.id.exerciseTXT);
             typeIV = (ImageView) v.findViewById(R.id.exerciseTypeIV);
+            amountTXT = (TextView) v.findViewById(R.id.numberTXT);
+            plusBTN = (Button) v.findViewById(R.id.plusBTN);
+            minusBTN = (Button) v.findViewById(R.id.minusBTN);
         }
     }
 
@@ -69,7 +76,7 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull recyclerViewAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final recyclerViewAdapter.MyViewHolder holder, int position) {
 
         holder.exerciseTXT.setText("" + FoundNames.get(position));
 
@@ -84,6 +91,33 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
         {
             holder.typeIV.setImageResource(R.drawable.chest);
         }
+
+        holder.plusBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int amount = Integer.parseInt(holder.amountTXT.getText().toString());
+
+                amount++;
+
+                holder.amountTXT.setText("" + amount);
+            }
+        });
+
+        holder.minusBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int amount = Integer.parseInt(holder.amountTXT.getText().toString());
+
+                if (amount > 0)
+                {
+                    amount--;
+
+                    holder.amountTXT.setText("" + amount);
+                }
+
+            }
+        });
 
     }
 

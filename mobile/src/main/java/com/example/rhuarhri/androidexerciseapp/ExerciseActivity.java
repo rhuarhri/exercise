@@ -22,6 +22,7 @@ import android.widget.Toast;
 public class ExerciseActivity extends AppCompatActivity {
 
         protected Handler messageHandler;
+        signalLossTimer checkSignal = new signalLossTimer();
         ImageView exerciseIV;
         ImageView notificationIV;
         ProgressBar exerciseProgress;
@@ -30,6 +31,8 @@ public class ExerciseActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction;
 
         int performance = 0;
+        int oldPerformance;
+        boolean performanceUpdated = true;
         int minPerformance = 1;
         int maxPerformance = 5;
 
@@ -46,7 +49,6 @@ public class ExerciseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
-        //Toast.makeText(this, "On this part you don't to do anything just watch", Toast.LENGTH_LONG).show();
 
         exerciseIV = (ImageView) findViewById(R.id.exerciseIV);
         notificationIV = (ImageView) findViewById(R.id.notificationIV);
@@ -59,7 +61,6 @@ public class ExerciseActivity extends AppCompatActivity {
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.show(pauseFragement);
         fragmentTransaction.commit();
-
 
         exerciseIV.setImageResource(R.drawable.human_figure_down);
         notificationIV.setImageResource(R.drawable.too_slow);
@@ -81,18 +82,17 @@ public class ExerciseActivity extends AppCompatActivity {
         ExerciseActivity.Receiver messageReceiver = new Receiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, messageFilter);
 
-
-
-
-
-
         mediaSetUp();
+
+
+        checkSignal.start();
 }
 
 
     public void messageText(String newinfo) {
-        if (newinfo.compareTo("") != 0) {
+        if (!newinfo.isEmpty() || newinfo != "") {
             performance = Integer.parseInt(newinfo);
+            performanceUpdated = true;
         }
     }
 
@@ -103,25 +103,15 @@ public class ExerciseActivity extends AppCompatActivity {
 
         public void onReceive(Context context, Intent intent) {
 
-//Upon receiving each message from the wearable, display the following text//
-
-            //String message = "I just received a message from the wearable " + receivedMessageNumber++;
-
-
-
             try{
 
                 performance = Integer.parseInt(intent.getStringExtra("message"));
+                performanceUpdated = true;
             }
             catch(Exception e)
             {
 
             }
-
-
-
-
-
         }
     }
 
@@ -148,38 +138,79 @@ public class ExerciseActivity extends AppCompatActivity {
 
         private void performanceChangeHandler()
         {
-            if (performance == 0)
-            {
-                if (pauseFragement.isHidden() == true) {
-                    fragmentTransaction.show(pauseFragement);
-                    fragmentTransaction.commit();
-                }
-            }
-            else
-            {
-                if (pauseFragement.isHidden() == false) {
-                    fragmentTransaction.hide(pauseFragement);
-                    fragmentTransaction.commit();
-                }
-            }
+            if (performance == oldPerformance) {
 
-            if (performance > minPerformance && performance < maxPerformance)
-            {
-                notificationIV.setImageResource(R.drawable.great_work);
-                //goodJobAudio.start();
+                if (performance == 0) {
+                    if (pauseFragement.isHidden() == true) {
+                        fragmentTransaction.show(pauseFragement);
+                        fragmentTransaction.commit();
+                    }
+                } else {
+                    if (pauseFragement.isHidden() == false) {
+                        fragmentTransaction.hide(pauseFragement);
+                        fragmentTransaction.commit();
+                    }
+                }
 
-            }
-            else if (performance < minPerformance)
-            {
-                notificationIV.setImageResource(R.drawable.too_slow);
-                //tooSlowAudio.start();
-            }
-            else if (performance > maxPerformance)
-            {
-                notificationIV.setImageResource(R.drawable.too_fast);
-                //tooFastAudio.start();
+                if (performance > minPerformance && performance < maxPerformance) {
+                    notificationIV.setImageResource(R.drawable.great_work);
+                    //goodJobAudio.start();
+
+                } else if (performance < minPerformance) {
+                    notificationIV.setImageResource(R.drawable.too_slow);
+                    //tooSlowAudio.start();
+                } else if (performance > maxPerformance) {
+                    notificationIV.setImageResource(R.drawable.too_fast);
+                    //tooFastAudio.start();
+                }
+
+                oldPerformance = performance;
             }
         }
+
+
+        public class signalLossTimer extends Thread
+        {
+            /*
+            This class is used to pause the app if the connection with the smart watch app is lost.
+            The smart watch should be constantly transmitting data and if there has been no data
+            from the smart watch in a 5 second period then the connection can be considered as lost.
+             */
+
+            @Override
+            public void run() {
+
+                while (true)
+                {
+                    try {
+
+
+                        if (performanceUpdated == true) {
+                            performanceUpdated = false;
+                        } else {
+                            performance = 0;
+                            performanceChangeHandler();
+                        }
+
+                        //wait 5 seconds
+                        Thread.sleep(5000);
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+
+
+
+            }
+        }
+
+    @Override
+    protected void onDestroy() {
+            //stop thread
+            checkSignal.stop();
+    }
 }
 
         //This is all a part of user testing

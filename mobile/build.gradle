@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
@@ -38,7 +42,12 @@ dependencies {
 
     annotationProcessor "android.arch.persistence.room:compiler:$rootProject.archRoomVersion"
 
+
+    implementation "android.arch.persistence.room:testing:$rootProject.archRoomVersion"
+
     implementation "android.arch.work:work-runtime:1.0.0-rc02"
+
+    implementation "android.arch.work:work-testing:1.0.0-rc02"
 
 
 }

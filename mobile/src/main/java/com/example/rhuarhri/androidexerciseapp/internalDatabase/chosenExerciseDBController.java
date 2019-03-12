@@ -46,11 +46,11 @@ public class chosenExerciseDBController extends Worker {
 
             addExercise();
         }
-        else if (function == "start")
+        else if (function.equals("start"))
         {
             getAllExercises();
         }
-        else if (function == "end")
+        else if (function.equals("end"))
         {
             removeAllExercises();
         }
@@ -67,13 +67,13 @@ public class chosenExerciseDBController extends Worker {
 
     private void addExercise()
     {
-        if (exerciseType != "leg" || exerciseType != "arm" || exerciseType != "chest")
+        if (!exerciseType.equals("leg") || !exerciseType.equals("arm") || !exerciseType.equals("chest"))
         {
             Data errorData = new Data.Builder().putString("error", "Exercise type must be either leg, arm or chest").build();
 
             threadResult = Worker.Result.failure(errorData);
         }
-        else if(ImageName == "")
+        else if(ImageName.equals(""))
         {
             Data errorData = new Data.Builder().putString("error", "Each exercise must have an image").build();
 

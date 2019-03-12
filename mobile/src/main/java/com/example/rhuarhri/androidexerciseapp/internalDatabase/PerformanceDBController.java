@@ -44,19 +44,19 @@ public class PerformanceDBController extends Worker {
 
         String function = getInputData().getString("function");
 
-        if (function == "leg")
+        if (function.equals("leg"))
         {
             increasePerformance("leg");
         }
-        else if (function == "arm")
+        else if (function.equals("arm"))
         {
             increasePerformance("arm");
         }
-        else if (function == "chest")
+        else if (function.equals("chest"))
         {
             increasePerformance("chest");
         }
-        else if (function == "get")
+        else if (function.equals("get"))
         {
             getAllPerformance();
         }

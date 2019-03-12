@@ -17,9 +17,18 @@ provided by android jet pack library
 
 public class WeightDBController extends Worker {
 
-    private double startWeight;
-    private double currentWeight;
+    private double startWeight = 0;
+    private double currentWeight = 0;
     private weightDBAccess weightDB;
+
+    /*
+    private Context appContext;
+
+    public WeightDBController(Context context)
+    {
+        appContext = context;
+    }*/
+
 
     private Result threadResult = Worker.Result.failure();
 
@@ -27,6 +36,7 @@ public class WeightDBController extends Worker {
     public WeightDBController(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
+
 
     @NonNull
     @Override
@@ -45,13 +55,17 @@ public class WeightDBController extends Worker {
         }
         else
         {
-            if (function == "add")
+            if (function.equals("add"))
             {
                 addWeight(inputWeight);
             }
-            else if (function == "get")
+            else if (function.equals("get"))
             {
                 getStoredWeight();
+
+                Data returnData = new Data.Builder().putDouble("start", startWeight).putDouble("current", currentWeight).build();
+
+                threadResult = Worker.Result.success(returnData);
             }
             else
             {
@@ -64,6 +78,42 @@ public class WeightDBController extends Worker {
         return threadResult;
     }
 
+/*
+    public String runOnMainThread(String Function, double weight)
+    {
+        weightDB = Room.databaseBuilder(appContext, weightDBAccess.class, "weightData" ).allowMainThreadQueries().build();
+
+        double inputWeight = weight;
+        String function = Function;
+
+        if (inputWeight <= 0)
+        {
+
+            return "weight can not be 0";
+
+        }
+        else
+        {
+            if (function.equals("add"))
+            {
+                addWeight(inputWeight);
+            }
+            else if (function.equals("get"))
+            {
+                getStoredWeight();
+            }
+            else
+            {
+
+                return "this function does not exist";
+
+
+            }
+        }
+
+        return "successful";
+    }*/
+
     private void addWeight(double Weight)
     {
         List<storedUserWeight> existingData = weightDB.storedWeight().getAll();
@@ -74,6 +124,8 @@ public class WeightDBController extends Worker {
             storedUserWeight newData = new storedUserWeight();
             newData.setCurrentWeight(Weight);
             newData.setStartWeight(Weight);
+
+            weightDB.storedWeight().add(newData);
         }
         else
         {
@@ -85,8 +137,7 @@ public class WeightDBController extends Worker {
 
     private void getStoredWeight()
     {
-        double startWeight = 0;
-        double currentWeight = 0;
+
 
         List<storedUserWeight> storedData = weightDB.storedWeight().getAll();
 
@@ -94,11 +145,14 @@ public class WeightDBController extends Worker {
 
         currentWeight = storedData.get(0).getCurrentWeight();
 
-        Data returnData = new Data.Builder().putDouble("start", startWeight).putDouble("current", currentWeight).build();
 
-        threadResult = Worker.Result.success(returnData);
     }
 
+    public double getStartWeight() {
+        return startWeight;
+    }
 
-
+    public double getCurrentWeight() {
+        return currentWeight;
+    }
 }
