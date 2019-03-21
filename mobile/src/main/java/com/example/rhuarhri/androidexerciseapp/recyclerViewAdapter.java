@@ -11,9 +11,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.rhuarhri.androidexerciseapp.externalDatabase.exercise;
+import com.example.rhuarhri.androidexerciseapp.externalDatabase.storedExercises;
+import com.example.rhuarhri.androidexerciseapp.internalDatabase.WeightDBController;
+import com.example.rhuarhri.androidexerciseapp.internalDatabase.chosenExerciseDBController;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapter.MyViewHolder> {
 
@@ -100,6 +107,12 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
                 amount++;
 
                 holder.amountTXT.setText("" + amount);
+
+                storedExercises addExercise = new storedExercises();
+
+                addExercise.addToExerciseRoutine(FoundNames.get(position));
+
+
             }
         });
 
@@ -113,7 +126,18 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
                 {
                     amount--;
 
+                    Data threadData = new Data.Builder().putString("function", "delete")
+                            .putString("name", holder.exerciseTXT.getText().toString())
+                            .build();
+
+                    OneTimeWorkRequest RemoveExerciseDB =
+                            new OneTimeWorkRequest.Builder(chosenExerciseDBController.class).setInputData(threadData).build();
+
+                    WorkManager.getInstance().enqueue(RemoveExerciseDB);
+
                     holder.amountTXT.setText("" + amount);
+
+
                 }
 
             }

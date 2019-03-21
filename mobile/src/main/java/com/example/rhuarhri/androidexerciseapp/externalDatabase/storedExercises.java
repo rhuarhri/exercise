@@ -62,7 +62,7 @@ public class storedExercises {
 
     }
 
-    public void createExerciseRoutine(String name, final int amount)
+    public void addToExerciseRoutine(String name)
     {
         db.collection("exercises").whereEqualTo("name", name).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -75,11 +75,13 @@ public class storedExercises {
                                 if (currentExercise != null) {
 
                                     Data threadData = new Data.Builder().putString("function", "add")
+                                            .putString("name", currentExercise.getName())
                                             .putString("type", currentExercise.getType())
                                             .putString("image", currentExercise.getImage())
                                             .putInt("min", currentExercise.getMinperformance())
                                             .putInt("max", currentExercise.getMaxperformance())
-                                            .putInt("amount", amount)
+                                            .putLong("time", currentExercise.getTime())
+                                            .putInt("amount", 1)
                                             .build();
 
                                     OneTimeWorkRequest addExercise = new OneTimeWorkRequest.Builder(chosenExerciseDBController.class)

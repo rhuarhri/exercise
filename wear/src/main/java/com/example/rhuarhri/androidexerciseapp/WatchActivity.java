@@ -1,13 +1,19 @@
 package com.example.rhuarhri.androidexerciseapp;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +41,9 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
     adb connect localhost:4444
      */
 
+    protected Handler messageHandler;
+
+
     boolean paused = false;
 
     TextView heartRateTXT;
@@ -45,8 +54,10 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
     Sensor heartRateSensor;
     Sensor accelerometer;
 
+    private heartRateHistory HeartRateOverTime = new heartRateHistory();
     private float currentHeartRate;
     private float currentMovement;
+
     //public for testing
     public int currentPerformanceLevel;
     private boolean okToSend;
@@ -71,6 +82,22 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
 
         // Enables Always-on
         setAmbientEnabled();
+
+        //Message handler
+        messageHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                Bundle stuff = msg.getData();
+                messageText(stuff.getString("messageText"));
+                return true;
+            }
+        });
+
+        //Register to receive local broadcasts
+
+        IntentFilter messageFilter = new IntentFilter(Intent.ACTION_SEND);
+        WatchActivity.Receiver messageReceiver = new Receiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, messageFilter);
 
         heartRateTXT = (TextView) findViewById(R.id.heartRateTXT);
 
@@ -99,9 +126,48 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
 
     }
 
+    public void messageText(String newinfo) {
+        if (!newinfo.isEmpty() || newinfo != "") {
+            if (newinfo.equals("heart"))
+            {
+                sendAverageHeartRate();
+            }
+
+        }
+    }
 
 
 
+    public class Receiver extends BroadcastReceiver {
+        @Override
+
+        public void onReceive(Context context, Intent intent) {
+
+            try{
+
+                String newinfo = intent.getStringExtra("message");
+
+                if (newinfo.equals("heart"))
+                {
+                    sendAverageHeartRate();
+                }
+
+
+            }
+            catch(Exception e)
+            {
+
+            }
+        }
+    }
+
+    private void sendAverageHeartRate()
+    {
+        new MessageHandler(getApplicationContext(), WatchActivity.this,
+                "" + HeartRateOverTime.getAverage()).start();
+        paused = true;
+        pauseBTN.setBackgroundResource(R.drawable.play);
+    }
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
@@ -116,6 +182,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         {
             currentHeartRate = sensorEvent.values[0];
             heartRateTXT.setText("" + currentHeartRate);
+            HeartRateOverTime.addHeartRate(currentHeartRate);
         }
 
         if (paused == false) {
@@ -145,62 +212,62 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
             {
                 return 0;
 
-                //new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
+
 
             }
             else if (heartRate > 80 && heartRate < 100)
             {
                 return 1;
 
-                //new MessageHandler(getApplicationContext(), WatchActivity.this, "1").start();
+
             }
             else if (heartRate > 100 && heartRate < 120)
             {
                 return 2;
 
-                //new MessageHandler(getApplicationContext(), WatchActivity.this, "2").start();
+
             }
             else if (heartRate > 120 && heartRate < 140)
             {
                 return 3;
 
-                //new MessageHandler(getApplicationContext(), WatchActivity.this, "3").start();
+
             }
             else if (heartRate > 140 && heartRate < 160)
             {
                 return 4;
 
-                //new MessageHandler(getApplicationContext(), WatchActivity.this, "4").start();
+
             }
             else if (heartRate > 160 && heartRate < 180)
             {
                 return 5;
 
-                //new MessageHandler(getApplicationContext(), WatchActivity.this, "5").start();
+
             }
             else if (heartRate > 180 && heartRate < 200)
             {
                 return 6;
 
-                //new MessageHandler(getApplicationContext(), WatchActivity.this, "6").start();
+
             }
             else if (heartRate > 200 && heartRate < 220)
             {
                 return 7;
 
-                //new MessageHandler(getApplicationContext(), WatchActivity.this, "7").start();
+
             }
             else if (heartRate > 220 && heartRate < 240)
             {
                 return 8;
 
-                //new MessageHandler(getApplicationContext(), WatchActivity.this, "8").start();
+
             }
             else if (heartRate > 240)
             {
                 return 9;
 
-                //new MessageHandler(getApplicationContext(), WatchActivity.this, "9").start();
+
             }
 
         }
@@ -208,7 +275,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         {
             return 0;
 
-            //new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
+
         }
 
         return 0;

@@ -1,5 +1,6 @@
 package com.example.rhuarhri.androidexerciseapp;
 
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.rhuarhri.androidexerciseapp.externalDatabase.storedExercises;
+import com.example.rhuarhri.androidexerciseapp.internalDatabase.chosenExerciseDBAccess;
+import com.example.rhuarhri.androidexerciseapp.internalDatabase.chosenExercises;
+
+import java.util.List;
 
 public class ChooseExerciseActivity extends AppCompatActivity {
     RecyclerView exerciseList;
@@ -17,6 +22,7 @@ public class ChooseExerciseActivity extends AppCompatActivity {
     RecyclerView.LayoutManager exerciseListManager;
 
     Button startBTN;
+    Button chestBTN;
 
 
 
@@ -31,9 +37,20 @@ public class ChooseExerciseActivity extends AppCompatActivity {
 
         setupRecyclerView();
 
+        chestBTN = (Button) findViewById(R.id.chestBTN);
         startBTN = (Button) findViewById(R.id.startBTN);
 
 
+
+        chestBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+
+
+            }
+        });
         startBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

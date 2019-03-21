@@ -24,6 +24,9 @@ public class MessageHandler extends Thread {
     /*
     How the api works
     The API assumes that the device it is running on is connected to multiple devices
+    it goes to each device that is connected to the device it is on.
+    What it is looking for is an app running on a connected device that has a key
+    that it is looking for.
 
 
      */
@@ -62,6 +65,7 @@ public class MessageHandler extends Thread {
     }
 
     /*
+
     public void sendmessage(String messageText) {
         Bundle bundle = new Bundle();
         bundle.putString("messageText", messageText);
@@ -69,18 +73,18 @@ public class MessageHandler extends Thread {
         msg.setData(bundle);
         myHandler.sendMessage(msg);
 
-    }*/
+    }
 
-    /*
+
     public void SendMessage(String Path, String Message)
     {
 
         path = Path;
         message = Message;
 
-    }*/
+    }
 
-    /*
+
     public void watchSendMessage()
     {
 
@@ -105,20 +109,18 @@ public class MessageHandler extends Thread {
 
                 try {
 
-//Block on a task and get the result synchronously//
-
                     Integer result = Tasks.await(sendMessageTask);
                     //sendmessage("I just sent the wearable a message " + sentMessageNumber++);
 
-                    //if the Task fails, then…..//
+
 
                 } catch (ExecutionException exception) {
 
-                    //TO DO: Handle the exception//
+
 
                 } catch (InterruptedException exception) {
 
-                    //TO DO: Handle the exception//
+
 
                 }
 
@@ -126,11 +128,11 @@ public class MessageHandler extends Thread {
 
         } catch (ExecutionException exception) {
 
-            //TO DO: Handle the exception//
+
 
         } catch (InterruptedException exception) {
 
-            //TO DO: Handle the exception//
+
         }
 
     }

@@ -40,8 +40,6 @@ public class OverStatsActivity extends AppCompatActivity implements LifecycleOwn
         getCurrentWeight = new OneTimeWorkRequest.Builder(WeightDBController.class).setInputData(threadData).build();
 
 
-        //TODO find a way to return a value from the getCurrentWeight thread
-
         WorkManager.getInstance().enqueue(getCurrentWeight);
 
         threadChecker check = new threadChecker();
@@ -101,9 +99,9 @@ public class OverStatsActivity extends AppCompatActivity implements LifecycleOwn
                 try {
 
                     String error  = "";
-                    //error = WorkManager.getInstance().getWorkInfoById(getCurrentWeight.getId()).get().getOutputData().getString("error");
+                    error = WorkManager.getInstance().getWorkInfoById(getCurrentWeight.getId()).get().getOutputData().getString("error");
 
-                    if (error == "" || error.isEmpty()) {
+                    if (error == "" || error == null) {
                         startWeight =
                                 WorkManager.getInstance().getWorkInfoById(getCurrentWeight.getId()).get().getOutputData().getDouble("start", 0);
 

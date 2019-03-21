@@ -18,5 +18,7 @@ public interface chosenExerciseInterface {
     @Query("SELECT * FROM chosenExercises")
     List<chosenExercises> getAll();
 
+    @Query("DELETE FROM chosenExercises WHERE name =:Name")
+    void deteleOneExercise(String Name);
 
 }

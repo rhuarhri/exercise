@@ -7,6 +7,7 @@ public class exercise {
     String image;
     int minperformance;
     int maxperformance;
+    long time;
 
     public String getName() {
         return name;
@@ -28,6 +29,10 @@ public class exercise {
         return maxperformance;
     }
 
+    public long getTime() {
+        return time;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -46,5 +51,9 @@ public class exercise {
 
     public void setMaxperformance(int maxperformance) {
         this.maxperformance = maxperformance;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 }

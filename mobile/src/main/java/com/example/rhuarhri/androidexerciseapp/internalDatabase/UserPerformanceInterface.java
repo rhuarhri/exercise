@@ -16,6 +16,9 @@ public interface UserPerformanceInterface {
     @Insert
     void AddNewPerformance(storedUserPerformance newPerformance);
 
+    @Query("SELECT COUNT(*) FROM storedUserPerformance")
+    int databaseSize();
+
     @Query("SELECT * FROM storedUserPerformance")
     List<storedUserPerformance> getAll();
 

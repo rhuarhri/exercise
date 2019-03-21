@@ -1,5 +1,6 @@
 package com.example.rhuarhri.androidexerciseapp;
 
+import android.arch.persistence.room.Room;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,15 +15,33 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.rhuarhri.androidexerciseapp.internalDatabase.PerformanceDBController;
+import com.example.rhuarhri.androidexerciseapp.internalDatabase.chosenExerciseDBAccess;
+import com.example.rhuarhri.androidexerciseapp.internalDatabase.chosenExerciseDBController;
+import com.example.rhuarhri.androidexerciseapp.internalDatabase.chosenExercises;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
 public class ExerciseActivity extends AppCompatActivity {
+
+
+    //TODO calculate time for the exercises
 
         protected Handler messageHandler;
         signalLossTimer checkSignal = new signalLossTimer();
+        boolean checkingForSignal = true;
         ImageView exerciseIV;
         ImageView notificationIV;
         ProgressBar exerciseProgress;
@@ -30,6 +49,7 @@ public class ExerciseActivity extends AppCompatActivity {
         FragmentManager fragmentManager;
         FragmentTransaction fragmentTransaction;
 
+        int currentExerciseLocation = 0;
         int performance = 0;
         int oldPerformance;
         boolean performanceUpdated = true;
@@ -43,18 +63,21 @@ public class ExerciseActivity extends AppCompatActivity {
         MediaPlayer tooSlowAudio;
         MediaPlayer tooFastAudio;
 
-        long time = 120000;
+        long time = 0;
+
+    OneTimeWorkRequest addExercise;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         exerciseIV = (ImageView) findViewById(R.id.exerciseIV);
         notificationIV = (ImageView) findViewById(R.id.notificationIV);
         exerciseProgress = (ProgressBar) findViewById(R.id.exercisePB);
 
-        exerciseProgress.setMax((int) time);
+
 
         fragmentManager = getSupportFragmentManager();
         pauseFragement = (exercisePause) fragmentManager.findFragmentById(R.id.pauseFRG);
@@ -65,7 +88,7 @@ public class ExerciseActivity extends AppCompatActivity {
         exerciseIV.setImageResource(R.drawable.human_figure_down);
         notificationIV.setImageResource(R.drawable.too_slow);
 
-        //Create a message handler//
+        //Message handler
 
         messageHandler = new Handler(new Handler.Callback() {
         @Override
@@ -76,13 +99,20 @@ public class ExerciseActivity extends AppCompatActivity {
             }
         });
 
-        //Register to receive local broadcasts, which we'll be creating in the next step//
+        //Register to receive local broadcasts
 
         IntentFilter messageFilter = new IntentFilter(Intent.ACTION_SEND);
         ExerciseActivity.Receiver messageReceiver = new Receiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, messageFilter);
 
         mediaSetUp();
+
+
+        getExercises();
+
+        Log.d("MESSAGE", "Time is " + time);
+
+        exerciseTime(time);
 
 
         checkSignal.start();
@@ -93,6 +123,7 @@ public class ExerciseActivity extends AppCompatActivity {
         if (!newinfo.isEmpty() || newinfo != "") {
             performance = Integer.parseInt(newinfo);
             performanceUpdated = true;
+            Log.d("RECEIVED PERFORMANCE", "current performance is " + performance);
         }
     }
 
@@ -107,6 +138,7 @@ public class ExerciseActivity extends AppCompatActivity {
 
                 performance = Integer.parseInt(intent.getStringExtra("message"));
                 performanceUpdated = true;
+                Log.d("RECEIVED PERFORMANCE", "received performance is " + performance);
             }
             catch(Exception e)
             {
@@ -116,18 +148,6 @@ public class ExerciseActivity extends AppCompatActivity {
     }
 
 
-/*
-//Use a Bundle to encapsulate our message//
-
-        public void sendmessage(String messageText) {
-            Bundle bundle = new Bundle();
-            bundle.putString("messageText", messageText);
-            Message msg = messageHandler.obtainMessage();
-            msg.setData(bundle);
-            messageHandler.sendMessage(msg);
-
-        }*/
-
 
         private void mediaSetUp()
         {
@@ -136,35 +156,85 @@ public class ExerciseActivity extends AppCompatActivity {
                 tooFastAudio = MediaPlayer.create(getApplicationContext(), R.raw.slow_down);
         }
 
+        private void getExercises()
+        {
+            //get exercise routine
+            chosenExerciseDBAccess ExerciseDB = Room.databaseBuilder(getApplicationContext(), chosenExerciseDBAccess.class, "ExerciseData")
+                    .allowMainThreadQueries().build();
+            List<chosenExercises> allExercises;
+
+            allExercises = ExerciseDB.storedExercises().getAll();
+
+
+            long exerciseTime = 0;
+
+            for (int i = 0; i < allExercises.size(); i++)
+            {
+                chosenExercises nextExercise = allExercises.get(i);
+
+                exerciseTime += nextExercise.getTime();
+
+                minPerformance = nextExercise.getMinimumPerformanceLevel();
+
+                maxPerformance = nextExercise.getMaximumPerformanceLevel();
+
+                String type = nextExercise.getExerciseType();
+
+                Data threadData = new Data.Builder().putString("function", type)
+                        .build();
+
+
+                addExercise = new OneTimeWorkRequest.Builder(PerformanceDBController.class)
+                        .setInputData(threadData).build();
+
+
+                WorkManager.getInstance().enqueue(addExercise);
+
+
+
+            }
+
+            time = exerciseTime;
+            Log.d("MESSAGE", "Time is " + time);
+
+
+        }
+
         private void performanceChangeHandler()
         {
-            if (performance == oldPerformance) {
+            int newPerformance = performance;
+            int OldPerformance = oldPerformance;
 
-                if (performance == 0) {
+
+            if (newPerformance == OldPerformance) {
+
+                if (newPerformance <= 0) {
                     if (pauseFragement.isHidden() == true) {
                         fragmentTransaction.show(pauseFragement);
                         fragmentTransaction.commit();
                     }
                 } else {
                     if (pauseFragement.isHidden() == false) {
+
+                        //TODO find a way to hide the fragment when the performance changes
                         fragmentTransaction.hide(pauseFragement);
                         fragmentTransaction.commit();
                     }
                 }
 
-                if (performance > minPerformance && performance < maxPerformance) {
+                if (newPerformance > minPerformance && newPerformance < maxPerformance) {
                     notificationIV.setImageResource(R.drawable.great_work);
                     //goodJobAudio.start();
 
-                } else if (performance < minPerformance) {
+                } else if (newPerformance < minPerformance) {
                     notificationIV.setImageResource(R.drawable.too_slow);
                     //tooSlowAudio.start();
-                } else if (performance > maxPerformance) {
+                } else if (newPerformance > maxPerformance) {
                     notificationIV.setImageResource(R.drawable.too_fast);
                     //tooFastAudio.start();
                 }
 
-                oldPerformance = performance;
+                oldPerformance = newPerformance;
             }
         }
 
@@ -180,7 +250,7 @@ public class ExerciseActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                while (true)
+                while (checkingForSignal == true)
                 {
                     try {
 
@@ -188,8 +258,11 @@ public class ExerciseActivity extends AppCompatActivity {
                         if (performanceUpdated == true) {
                             performanceUpdated = false;
                         } else {
-                            performance = 0;
-                            performanceChangeHandler();
+                            if(performance > 0) {
+                                performance = 0;
+                                performanceChangeHandler();
+                            }
+
                         }
 
                         //wait 5 seconds
@@ -206,141 +279,179 @@ public class ExerciseActivity extends AppCompatActivity {
             }
         }
 
+        boolean displayPositionOne = true;
+
+        int pauseTime = 0;
+
+        private void changeImage()
+        {
+
+            if (performance >= maxPerformance) {
+                if (displayPositionOne == true) {
+                    exerciseIV.setImageResource(R.drawable.human_figure_down);
+                    displayPositionOne = false;
+                } else {
+                    exerciseIV.setImageResource(R.drawable.human_figure_up);
+                    displayPositionOne = true;
+                }
+            }
+            else {
+                if (pauseTime == (maxPerformance - performance))
+                {
+                    if (displayPositionOne == true) {
+                        exerciseIV.setImageResource(R.drawable.human_figure_down);
+                        displayPositionOne = false;
+                    } else {
+                        exerciseIV.setImageResource(R.drawable.human_figure_up);
+                        displayPositionOne = true;
+                    }
+                    pauseTime = 0;
+                }
+                else if (performance == 0)
+                {
+                    //do nothing
+                }
+                else {
+
+                    pauseTime++;
+                }
+            }
+
+
+        }
+
+        private void exerciseTime(long Time)
+        {
+            exerciseProgress.setMax((int) Time);
+
+            CountDownTimer exerciseTimer = new CountDownTimer(Time, 500) {
+                @Override
+                public void onTick(long l) {
+
+
+
+
+                    exerciseProgress.setProgress(((int) Time -(int) l));
+
+                    changeImage();
+
+
+
+
+
+                }
+
+                @Override
+                public void onFinish() {
+                    Intent completeScreen = new Intent(getApplicationContext(), completeActivity.class);
+
+                    startActivity(completeScreen);
+                }
+            }.start();
+
+
+
+
+        }
+
     @Override
     protected void onDestroy() {
-            //stop thread
-            checkSignal.stop();
+        super.onDestroy();
+        OneTimeWorkRequest removeExerciseRoutine;
+
+        Data threadData = new Data.Builder().putString("function", "end")
+                .build();
+
+
+        removeExerciseRoutine = new OneTimeWorkRequest.Builder(chosenExerciseDBController.class)
+                .setInputData(threadData).build();
+
+
+        WorkManager.getInstance().enqueue(removeExerciseRoutine);
     }
 }
 
-        //This is all a part of user testing
-        /*CountDownTimer exerciseTimer = new CountDownTimer(time, 2000) {
-@Override
-public void onTick(long l) {
+/**PAST CODE **/
+/*
+The code below was meant to display a series of images for a period of time.
+It would have been used if it worked.
 
-        if(l > 110000)
-        {
-        Displayed = true;
+        This idea did not really work as the images could not be updated within a thread
+
+        //List<Integer> images = new ArrayList<Integer>();
+        //images.add(R.drawable.human_figure_down);
+        //images.add(R.drawable.human_figure_up);
+        //exerciseTimer timer = new exerciseTimer(10, 1000, images);
+
+        //timer.start();
+
+        public class exerciseTimer extends Thread{
+
+            private int Time;
+            private long Intervals;
+            private List<Integer> ImageName;
+            private int imageLocation = 0;
+
+
+            public exerciseTimer(int time, long intervals, List<Integer> imageResources)
+            {
+
+                Time = time;
+                Intervals = intervals;
+                ImageName = imageResources;
+
+            }
+
+            public void run()
+            {
+                for (int i = 0; i < Time; i++)
+                {
+                    try {
+                        Thread.sleep(Intervals);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (imageLocation < ImageName.size())
+                    {
+                        Log.d("IMAGE FLIP TEST", "location is " + imageLocation);
+                        //TODO most likely will need a list of bitmaps which are the exercise images
+                        flipBetweenImages();
+                        imageLocation++;
+                    }
+                    else{
+                        imageLocation = 0;
+                    }
+
+
+                }
+            }
+        }
+
+    @Override
+    protected void onDestroy() {
+            //stop thread just in case
+            checkingForSignal = false;
+    }
+
+    //image test
+    boolean test = false;
+    public void flipBetweenImages()
+    {
+
+        if (test = false) {
+            notificationIV.setImageResource(R.drawable.chest);
+            test = true;
         }
         else
         {
-        if(Displayed == true)
-        {
-        fragmentTransaction.hide(pauseFragement);
-        fragmentTransaction.commit();
-        Displayed = false;
+            notificationIV.setImageResource(R.drawable.arm);
+            test = false;
         }
 
-        exerciseProgress.setProgress(((int) time -(int) l));
-
-        exerciseDisplay();
-        iconIteration++;
-        if (iconIteration == 10)
-        {
-        //every 20 seconds
-        notificationDisplay();
-        iconIteration = 0;
-        }
-
-        }
+    }
 
 
-
-        }
-
-@Override
-public void onFinish() {
-        Intent completeScreen = new Intent(getApplicationContext(), completeActivity.class);
-
-        startActivity(completeScreen);
-        }
-        }.start();
+ */
 
 
-
-
-        }
-
-private void notificationDisplay()
-        {
-        if (notificationIteration == 0)
-        {
-        //Toast.makeText(this, "You are exercising too slowly", Toast.LENGTH_LONG).show();
-
-        notificationIV.setImageResource(R.drawable.too_slow);
-        tooSlowAudio.start();
-
-        notificationIteration++;
-        }
-        else if (notificationIteration == 1)
-        {
-        //Toast.makeText(this, "You are exercising correctly", Toast.LENGTH_LONG).show();
-
-        notificationIV.setImageResource(R.drawable.great_work);
-        goodJobAudio.start();
-
-        notificationIteration++;
-        }
-        else if (notificationIteration == 2)
-        {
-        notificationIteration = 1;
-        //Toast.makeText(this, "You are exercising too fast", Toast.LENGTH_SHORT).show();
-        notificationIV.setImageResource(R.drawable.too_fast);
-        tooFastAudio.start();
-        }
-        else{
-        notificationIteration = 0;
-        }
-
-
-        }
-
-
-private void exerciseDisplay()
-        {
-        if (iteration == 0)
-        {
-        exerciseIV.setImageResource(R.drawable.human_figure_down);
-        iteration++;
-        }
-        else
-        {
-        iteration = 0;
-        exerciseIV.setImageResource(R.drawable.human_figure_up);
-        }
-
-
-        }
-
-private void pauseDisplay()
-        {
-        if (fragmentDisplayed == true)
-        {
-        if (pauseFragement.isHidden() == true)
-        {
-        if (Displayed == false){
-        fragmentTransaction.show(pauseFragement);
-        fragmentTransaction.commit();
-        Displayed = true;}
-        }
-
-
-        }
-        else
-        {
-
-
-        if (pauseFragement.isHidden() == false)
-        {
-        if(hidden == false){
-        fragmentTransaction.hide(pauseFragement);
-        fragmentTransaction.commit();
-        hidden = true;}
-        }
-
-
-        }
-
-        }
-
-*/

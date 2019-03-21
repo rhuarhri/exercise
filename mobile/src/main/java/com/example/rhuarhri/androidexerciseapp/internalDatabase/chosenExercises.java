@@ -12,6 +12,9 @@ public class chosenExercises {
     @PrimaryKey(autoGenerate = true)
     int id;
 
+    @ColumnInfo(name = "name")
+    String ExerciseName;
+
     @ColumnInfo(name = "type")
     String exerciseType;
 
@@ -27,9 +30,16 @@ public class chosenExercises {
     @ColumnInfo(name = "amount")
     int amount;
 
+    @ColumnInfo(name = "time")
+    long time;
+
     @NonNull
     public int getId() {
         return id;
+    }
+
+    public String getExerciseName() {
+        return ExerciseName;
     }
 
     public String getExerciseType() {
@@ -52,8 +62,17 @@ public class chosenExercises {
         return amount;
     }
 
+
+    public long getTime() {
+        return time;
+    }
+
     public void setId(@NonNull int id) {
         this.id = id;
+    }
+
+    public void setExerciseName(String exerciseName) {
+        ExerciseName = exerciseName;
     }
 
     public void setExerciseType(String exerciseType) {
@@ -74,5 +93,9 @@ public class chosenExercises {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 }

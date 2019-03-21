@@ -3,6 +3,7 @@ package com.example.rhuarhri.androidexerciseapp.internalDatabase;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -75,7 +76,7 @@ public class PerformanceDBController extends Worker {
     {
         allPerformanceData = performanceDB.storedPerformance().getAll();
 
-        if (allPerformanceData.isEmpty() == true)
+        if (performanceDB.storedPerformance().databaseSize() <= 0)
         {
             //no data in database
             storedUserPerformance newPerformance = new storedUserPerformance();
@@ -88,6 +89,8 @@ public class PerformanceDBController extends Worker {
             newPerformance.setTimesExercisingLegs(0);
 
             performanceDB.storedPerformance().AddNewPerformance(newPerformance);
+
+            Log.d("Message:", "No data in data base");
         }
         else
         {
@@ -119,6 +122,8 @@ public class PerformanceDBController extends Worker {
                 .putInt("arm", armPerformance)
                 .putInt("chest", chestPerformance)
                 .build();
+
+        Log.d("Message", "get performance");
 
         threadResult = Worker.Result.success(performanceData);
 
@@ -183,15 +188,18 @@ public class PerformanceDBController extends Worker {
     private void increasePerformance(String bodyPart)
     {
 
-        if (bodyPart == "leg")
+        if (bodyPart.equals("leg"))
         {
             legExercises = performanceDB.storedPerformance().getLegPerformance().get(0);
 
             legExercises++;
 
-            performanceDB.storedPerformance().increaseLegPerformance(legPerformance);
+            performanceDB.storedPerformance().increaseLegPerformance(legExercises);
+
+
+            threadResult = Worker.Result.success();
         }
-        else if (bodyPart == "arm")
+        else if (bodyPart.equals("arm"))
         {
             armExercises = performanceDB.storedPerformance().getArmPerformance().get(0);
 
@@ -199,19 +207,29 @@ public class PerformanceDBController extends Worker {
 
             performanceDB.storedPerformance().increaseArmPerformance(armExercises);
 
+
+            threadResult = Worker.Result.success();
+
         }
-        else if (bodyPart == "chest")
+        else if (bodyPart.equals("chest"))
         {
             chestExercises = performanceDB.storedPerformance().getchestPerformance().get(0);
 
             chestExercises++;
 
             performanceDB.storedPerformance().increaseChestPerformance(chestExercises);
+
+
+            threadResult = Worker.Result.success();
         }
         else
         {
 
         }
+
+
+
+        //threadResult = Worker.Result.success();
     }
 
 
