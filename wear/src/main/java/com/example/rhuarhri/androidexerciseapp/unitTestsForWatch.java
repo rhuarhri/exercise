@@ -47,5 +47,23 @@ public class unitTestsForWatch {
         assertEquals(expected, result);
     }
 
+    @Test
+    public void getAverageHeartRate()
+    {
+        heartRateHistory test = new heartRateHistory();
+
+        test.addHeartRate(68);
+        test.addHeartRate(74);
+        test.addHeartRate(72);
+        test.addHeartRate(67);
+        test.addHeartRate(71);
+        test.addHeartRate(69);
+
+        long expected = 70;
+        long result = test.getAverage();
+
+        assertEquals(expected, result);
+    }
+
 
 }

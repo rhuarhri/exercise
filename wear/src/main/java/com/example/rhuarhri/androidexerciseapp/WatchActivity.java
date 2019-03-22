@@ -15,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -45,6 +46,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
 
 
     boolean paused = false;
+    periodicUpdater updater;
 
     TextView heartRateTXT;
     //TextView performanceLevelTXT;
@@ -53,6 +55,8 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
     SensorManager healthSensorManager;
     Sensor heartRateSensor;
     Sensor accelerometer;
+    SensorEvent sensorData;
+    boolean UpdateSensorData = true;
 
     private heartRateHistory HeartRateOverTime = new heartRateHistory();
     private float currentHeartRate;
@@ -112,17 +116,22 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
                 if (paused == false)
                 {
                     paused = true;
+                    UpdateSensorData = false;
                     pauseBTN.setBackgroundResource(R.drawable.play);
                     new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
                 }
                 else {
                     paused = false;
+                    UpdateSensorData = true;
                     pauseBTN.setBackgroundResource(R.drawable.pause);
                     new MessageHandler(getApplicationContext(), WatchActivity.this, "1").start();
+
                 }
 
             }
         });
+
+
 
     }
 
@@ -166,6 +175,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         new MessageHandler(getApplicationContext(), WatchActivity.this,
                 "" + HeartRateOverTime.getAverage()).start();
         paused = true;
+        UpdateSensorData = false;
         pauseBTN.setBackgroundResource(R.drawable.play);
     }
 
@@ -182,17 +192,25 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         {
             currentHeartRate = sensorEvent.values[0];
             heartRateTXT.setText("" + currentHeartRate);
-            HeartRateOverTime.addHeartRate(currentHeartRate);
+            //HeartRateOverTime.addHeartRate(currentHeartRate);
         }
 
-        if (paused == false) {
+        //sensorData = sensorEvent;
 
-            new MessageHandler(getApplicationContext(), WatchActivity.this,
-                    "" + calculatePerformance(currentHeartRate, currentMovement)).start();
+        if (UpdateSensorData == true) {
+            updater = new periodicUpdater();
+            updater.start();
 
-        }
-        else{
 
+            if (paused == false) {
+
+                new MessageHandler(getApplicationContext(), WatchActivity.this,
+                        "" + calculatePerformance(currentHeartRate, currentMovement)).start();
+
+
+            } else {
+
+            }
         }
 
     }
@@ -293,6 +311,54 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         else{
             return false;
         }
+    }
+
+    //This exists as the data from the smart watch's sensors changed too quickly
+    //this caused the problem of the app being also constantly paused
+    // as the performance level would instantly change from a positive number
+    // to 0
+    private class periodicUpdater extends Thread
+    {
+
+
+        public periodicUpdater() {
+
+            UpdateSensorData = false;
+
+
+        }
+
+        public void run()
+        {
+
+                try {
+                    Thread.sleep(500);
+
+                    /*
+                    if (sensorData.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+                    {
+                        currentMovement = sensorData.values[0];
+
+                    }
+                    else
+                    {
+                        currentHeartRate = sensorData.values[0];
+                        heartRateTXT.setText("" + currentHeartRate);
+                        HeartRateOverTime.addHeartRate(currentHeartRate);
+                    }*/
+
+                    HeartRateOverTime.addHeartRate(currentHeartRate);
+
+                    Log.d("UPDATE", "heart rate " + currentHeartRate);
+
+                    UpdateSensorData = true;
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+        }
+
     }
 
 

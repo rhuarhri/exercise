@@ -15,18 +15,20 @@ import androidx.work.WorkerParameters;
 
 public class PerformanceDBController extends Worker {
 
-    private performanceDBAccess performanceDB;
+    //private performanceDBAccess performanceDB;
 
-    List<storedUserPerformance> allPerformanceData;
+    //List<storedUserPerformance> allPerformanceData;
 
-    private int legPerformance = 0;
-    private int legExercises = 0;
-    private int armPerformance = 0;
-    private int armExercises = 0;
-    private int chestPerformance = 0;
-    private int chestExercises = 0;
+    //private int legPerformance = 0;
+    //private int legExercises = 0;
+    //private int armPerformance = 0;
+    //private int armExercises = 0;
+    //private int chestPerformance = 0;
+    //private int chestExercises = 0;
 
-    private long duration = 0;
+    //private long duration = 0;
+
+    performanceDBLogic DBLogic;
 
     private Result threadResult = Worker.Result.failure();
 
@@ -38,28 +40,43 @@ public class PerformanceDBController extends Worker {
     @Override
     public Result doWork() {
 
-        performanceDB = Room.databaseBuilder(getApplicationContext(), performanceDBAccess.class, "performanceData").build();
+       //performanceDB = Room.databaseBuilder(getApplicationContext(), performanceDBAccess.class, "performanceData").build();
 
-        checkDataInDatabase();
+        DBLogic = new performanceDBLogic(getApplicationContext());
+
+        DBLogic.checkDataInDatabase();
 
 
         String function = getInputData().getString("function");
 
         if (function.equals("leg"))
         {
-            increasePerformance("leg");
+            DBLogic.increasePerformance("leg");
+            getResult();
         }
         else if (function.equals("arm"))
         {
-            increasePerformance("arm");
+            DBLogic.increasePerformance("arm");
+            getResult();
         }
         else if (function.equals("chest"))
         {
-            increasePerformance("chest");
+            DBLogic.increasePerformance("chest");
+            getResult();
         }
         else if (function.equals("get"))
         {
-            getAllPerformance();
+            Data performanceData = DBLogic.getAllPerformance();
+
+            if (DBLogic.Successful()) {
+                threadResult = Worker.Result.success(performanceData);
+            }
+            else
+            {
+                Data errorData = new Data.Builder().putString("error", DBLogic.getError()).build();
+
+                threadResult = Worker.Result.failure(errorData);
+            }
         }
         else
         {
@@ -72,6 +89,20 @@ public class PerformanceDBController extends Worker {
         return threadResult;
     }
 
+    private void getResult()
+    {
+        if (DBLogic.Successful()) {
+            threadResult = Worker.Result.success();
+        }
+        else
+        {
+            Data errorData = new Data.Builder().putString("error", DBLogic.getError()).build();
+
+            threadResult = Worker.Result.failure(errorData);
+        }
+    }
+
+    /*
     private void checkDataInDatabase()
     {
         allPerformanceData = performanceDB.storedPerformance().getAll();
@@ -96,7 +127,7 @@ public class PerformanceDBController extends Worker {
         {
 
         }
-    }
+    }*
 
     private void getAllPerformance()
     {
@@ -127,7 +158,7 @@ public class PerformanceDBController extends Worker {
 
         threadResult = Worker.Result.success(performanceData);
 
-    }
+    }*
 
     private int calculatePerformance(int exerciseAmount)
     {
@@ -136,13 +167,13 @@ public class PerformanceDBController extends Worker {
         1 is good
         2 is average
         3 is bad
-        */
+        *
 
         long duration = getDuration();
 
         /*it is expected that a person would have good performance
         if they do five exercises on one part of the body
-         */
+         *
         long expected = 5 * duration;
 
         long actual = exerciseAmount;

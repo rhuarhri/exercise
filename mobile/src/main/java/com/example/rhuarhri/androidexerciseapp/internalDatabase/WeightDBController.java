@@ -17,9 +17,9 @@ provided by android jet pack library
 
 public class WeightDBController extends Worker {
 
-    private double startWeight = 0;
-    private double currentWeight = 0;
-    private weightDBAccess weightDB;
+    //private double startWeight = 0;
+    //private double currentWeight = 0;
+    //private weightDBAccess weightDB;
 
     /*
     private Context appContext;
@@ -29,6 +29,7 @@ public class WeightDBController extends Worker {
         appContext = context;
     }*/
 
+    private WeightDBLogic DBLogic;
 
     private Result threadResult = Worker.Result.failure();
 
@@ -42,7 +43,9 @@ public class WeightDBController extends Worker {
     @Override
     public Result doWork() {
 
-        weightDB = Room.databaseBuilder(getApplicationContext(), weightDBAccess.class, "weightData" ).build();
+        //weightDB = Room.databaseBuilder(getApplicationContext(), weightDBAccess.class, "weightData" ).build();
+
+        DBLogic = new WeightDBLogic(getApplicationContext());
 
         double inputWeight = getInputData().getDouble("weight", 0);
         String function = getInputData().getString("function");
@@ -57,15 +60,23 @@ public class WeightDBController extends Worker {
         {
             if (function.equals("add"))
             {
-                addWeight(inputWeight);
+                DBLogic.addWeight(inputWeight);
+
+                getResult();
             }
             else if (function.equals("get"))
             {
-                getStoredWeight();
+                Data returnData = DBLogic.getStoredWeight();
 
-                Data returnData = new Data.Builder().putDouble("start", startWeight).putDouble("current", currentWeight).build();
+                if (DBLogic.Successful() == true)
+                {
+                    threadResult = Worker.Result.success(returnData);
+                }
+                else
+                {
+                    threadResult = Worker.Result.failure();
+                }
 
-                threadResult = Worker.Result.success(returnData);
             }
             else
             {
@@ -76,6 +87,19 @@ public class WeightDBController extends Worker {
         }
 
         return threadResult;
+    }
+
+    private void getResult()
+    {
+        if (DBLogic.Successful()) {
+            threadResult = Worker.Result.success();
+        }
+        else
+        {
+            Data errorData = new Data.Builder().putString("error", DBLogic.getError()).build();
+
+            threadResult = Worker.Result.failure(errorData);
+        }
     }
 
 /*
@@ -114,6 +138,7 @@ public class WeightDBController extends Worker {
         return "successful";
     }*/
 
+/*
     private void addWeight(double Weight)
     {
         List<storedUserWeight> existingData = weightDB.storedWeight().getAll();
@@ -154,5 +179,5 @@ public class WeightDBController extends Worker {
 
     public double getCurrentWeight() {
         return currentWeight;
-    }
+    }*/
 }

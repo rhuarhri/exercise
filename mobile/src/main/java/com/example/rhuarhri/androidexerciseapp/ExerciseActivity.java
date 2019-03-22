@@ -208,18 +208,21 @@ public class ExerciseActivity extends AppCompatActivity {
 
             if (newPerformance == OldPerformance) {
 
+            }
+            else {
+
                 if (newPerformance <= 0) {
-                    if (pauseFragement.isHidden() == true) {
+                    //if (pauseFragement.isHidden() == true) {
                         fragmentTransaction.show(pauseFragement);
                         fragmentTransaction.commit();
-                    }
+                    //}
                 } else {
-                    if (pauseFragement.isHidden() == false) {
+                    //if (pauseFragement.isHidden() == false) {
 
                         //TODO find a way to hide the fragment when the performance changes
                         fragmentTransaction.hide(pauseFragement);
                         fragmentTransaction.commit();
-                    }
+                    //}
                 }
 
                 if (newPerformance > minPerformance && newPerformance < maxPerformance) {
