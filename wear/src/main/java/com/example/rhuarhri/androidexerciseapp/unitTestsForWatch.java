@@ -9,12 +9,10 @@ public class unitTestsForWatch {
 
 
     @Test
-    public void PerformanceBelowMinimumValue()
+    public void PerformanceHeartRateBelowMinimumValue()
     {
          WatchActivity testWatch = new WatchActivity();
-        int result = testWatch.calculatePerformance(79, 3);
-
-
+        int result = testWatch.calculatePerformance(59, 3);
 
          int expected = 0;
 
@@ -22,7 +20,7 @@ public class unitTestsForWatch {
     }
 
     @Test
-    public void PerformanceGoodButNotMoving()
+    public void PerformanceHeartRateGoodButNotMoving()
     {
         WatchActivity testWatch = new WatchActivity();
         int result = testWatch.calculatePerformance(120, 0);
@@ -35,7 +33,7 @@ public class unitTestsForWatch {
     }
 
     @Test
-    public void PerformanceHigh()
+    public void PerformanceHeartRateTooHigh()
     {
         WatchActivity testWatch = new WatchActivity();
         int result = testWatch.calculatePerformance(241, 3);

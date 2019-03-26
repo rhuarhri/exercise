@@ -61,6 +61,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
     private heartRateHistory HeartRateOverTime = new heartRateHistory();
     private float currentHeartRate;
     private float currentMovement;
+    private boolean stopSending = false;
 
     //public for testing
     public int currentPerformanceLevel;
@@ -118,13 +119,19 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
                     paused = true;
                     UpdateSensorData = false;
                     pauseBTN.setBackgroundResource(R.drawable.play);
-                    new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
+                    if(stopSending = true) {
+                        new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
+                    }
+                    Log.d("Performance", "performance is 0");
                 }
                 else {
                     paused = false;
                     UpdateSensorData = true;
                     pauseBTN.setBackgroundResource(R.drawable.pause);
-                    new MessageHandler(getApplicationContext(), WatchActivity.this, "1").start();
+                    if(stopSending = true) {
+                        new MessageHandler(getApplicationContext(), WatchActivity.this, "1").start();
+                    }
+                    Log.d("Performance", "performance is 1");
 
                 }
 
@@ -174,6 +181,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
     {
         new MessageHandler(getApplicationContext(), WatchActivity.this,
                 "" + HeartRateOverTime.getAverage()).start();
+        stopSending = true;
         paused = true;
         UpdateSensorData = false;
         pauseBTN.setBackgroundResource(R.drawable.play);
@@ -206,10 +214,15 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
 
                 new MessageHandler(getApplicationContext(), WatchActivity.this,
                         "" + calculatePerformance(currentHeartRate, currentMovement)).start();
+                Log.d("Performance", "performance is " + calculatePerformance(currentHeartRate, currentMovement));
 
 
             } else {
 
+                if (stopSending == false) {
+                    new MessageHandler(getApplicationContext(), WatchActivity.this, "0").start();
+                    Log.d("Performance", "performance is 0");
+                }
             }
         }
 
@@ -226,62 +239,62 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
 
         if (isMoving(movement) == true) {
 
-            if(heartRate < 80)
+            if(heartRate < 60)
             {
                 return 0;
 
 
 
             }
-            else if (heartRate > 80 && heartRate < 100)
+            else if (heartRate > 60 && heartRate < 80)
             {
                 return 1;
 
 
             }
-            else if (heartRate > 100 && heartRate < 120)
+            else if (heartRate > 80 && heartRate < 100)
             {
                 return 2;
 
 
             }
-            else if (heartRate > 120 && heartRate < 140)
+            else if (heartRate > 100 && heartRate < 120)
             {
                 return 3;
 
 
             }
-            else if (heartRate > 140 && heartRate < 160)
+            else if (heartRate > 120 && heartRate < 140)
             {
                 return 4;
 
 
             }
-            else if (heartRate > 160 && heartRate < 180)
+            else if (heartRate > 140 && heartRate < 160)
             {
                 return 5;
 
 
             }
-            else if (heartRate > 180 && heartRate < 200)
+            else if (heartRate > 160 && heartRate < 180)
             {
                 return 6;
 
 
             }
-            else if (heartRate > 200 && heartRate < 220)
+            else if (heartRate > 180 && heartRate < 200)
             {
                 return 7;
 
 
             }
-            else if (heartRate > 220 && heartRate < 240)
+            else if (heartRate > 200 && heartRate < 220)
             {
                 return 8;
 
 
             }
-            else if (heartRate > 240)
+            else if (heartRate > 220)
             {
                 return 9;
 
@@ -304,7 +317,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
     {
         int movementRounded = Math.round(movement);
 
-        if (movementRounded > 2 || movementRounded < -2)
+        if (movementRounded > 0 || movementRounded < 0)
         {
             return true;
         }
@@ -349,7 +362,7 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
 
                     HeartRateOverTime.addHeartRate(currentHeartRate);
 
-                    Log.d("UPDATE", "heart rate " + currentHeartRate);
+
 
                     UpdateSensorData = true;
 

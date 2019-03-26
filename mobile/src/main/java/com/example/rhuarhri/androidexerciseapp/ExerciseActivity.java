@@ -51,7 +51,7 @@ public class ExerciseActivity extends AppCompatActivity {
 
         int currentExerciseLocation = 0;
         int performance = 0;
-        int oldPerformance;
+        //int oldPerformance;
         boolean performanceUpdated = true;
         int minPerformance = 1;
         int maxPerformance = 5;
@@ -62,6 +62,8 @@ public class ExerciseActivity extends AppCompatActivity {
         MediaPlayer goodJobAudio;
         MediaPlayer tooSlowAudio;
         MediaPlayer tooFastAudio;
+
+        int displayNotifications = 0;
 
         long time = 0;
 
@@ -110,12 +112,13 @@ public class ExerciseActivity extends AppCompatActivity {
 
         getExercises();
 
-        Log.d("MESSAGE", "Time is " + time);
+        //Log.d("MESSAGE", "Time is " + time);
 
         exerciseTime(time);
 
 
         checkSignal.start();
+
 }
 
 
@@ -123,7 +126,8 @@ public class ExerciseActivity extends AppCompatActivity {
         if (!newinfo.isEmpty() || newinfo != "") {
             performance = Integer.parseInt(newinfo);
             performanceUpdated = true;
-            Log.d("RECEIVED PERFORMANCE", "current performance is " + performance);
+            //Log.d("RECEIVED PERFORMANCE", "current performance is " + performance);
+            //performanceChangeHandler();
         }
     }
 
@@ -138,7 +142,8 @@ public class ExerciseActivity extends AppCompatActivity {
 
                 performance = Integer.parseInt(intent.getStringExtra("message"));
                 performanceUpdated = true;
-                Log.d("RECEIVED PERFORMANCE", "received performance is " + performance);
+                //Log.d("RECEIVED PERFORMANCE", "received performance is " + performance);
+                performanceChangeHandler();
             }
             catch(Exception e)
             {
@@ -155,6 +160,7 @@ public class ExerciseActivity extends AppCompatActivity {
                 tooSlowAudio = MediaPlayer.create(getApplicationContext(), R.raw.speed_up);
                 tooFastAudio = MediaPlayer.create(getApplicationContext(), R.raw.slow_down);
         }
+
 
         private void getExercises()
         {
@@ -203,42 +209,55 @@ public class ExerciseActivity extends AppCompatActivity {
         private void performanceChangeHandler()
         {
             int newPerformance = performance;
-            int OldPerformance = oldPerformance;
+            //int OldPerformance = oldPerformance;
 
-
+/*
             if (newPerformance == OldPerformance) {
 
             }
-            else {
+            else {*/
 
+                Log.d("Performance", "performance is "+newPerformance);
                 if (newPerformance <= 0) {
-                    //if (pauseFragement.isHidden() == true) {
+                    if (pauseFragement.isHidden() == true) {
                         fragmentTransaction.show(pauseFragement);
-                        fragmentTransaction.commit();
-                    //}
+                        fragmentTransaction.commitNow();
+                        displayNotifications = 0;
+                    }
                 } else {
-                    //if (pauseFragement.isHidden() == false) {
+                    if (pauseFragement.isHidden() == false) {
 
                         //TODO find a way to hide the fragment when the performance changes
                         fragmentTransaction.hide(pauseFragement);
-                        fragmentTransaction.commit();
-                    //}
+                        fragmentTransaction.commitNow();
+
+                    }
                 }
 
-                if (newPerformance > minPerformance && newPerformance < maxPerformance) {
-                    notificationIV.setImageResource(R.drawable.great_work);
-                    //goodJobAudio.start();
+                if (displayNotifications >= 10)
+                {
+                    //is ensures that the notifications only change about once every
+                    //5 seconds
+            if (performance > minPerformance && performance < maxPerformance) {
+                notificationIV.setImageResource(R.drawable.great_work);
+                goodJobAudio.start();
 
-                } else if (newPerformance < minPerformance) {
-                    notificationIV.setImageResource(R.drawable.too_slow);
-                    //tooSlowAudio.start();
-                } else if (newPerformance > maxPerformance) {
-                    notificationIV.setImageResource(R.drawable.too_fast);
-                    //tooFastAudio.start();
-                }
-
-                oldPerformance = newPerformance;
+            } else if (performance < minPerformance) {
+                notificationIV.setImageResource(R.drawable.too_slow);
+                tooSlowAudio.start();
+            } else if (performance > maxPerformance) {
+                notificationIV.setImageResource(R.drawable.too_fast);
+                tooFastAudio.start();
             }
+
+            displayNotifications = 0;
+
+            }
+            else{
+                    displayNotifications++;
+                }
+
+            //oldPerformance = newPerformance;
         }
 
 
@@ -313,10 +332,12 @@ public class ExerciseActivity extends AppCompatActivity {
                 else if (performance == 0)
                 {
                     //do nothing
+
                 }
                 else {
 
                     pauseTime++;
+
                 }
             }
 
@@ -360,6 +381,8 @@ public class ExerciseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+
         OneTimeWorkRequest removeExerciseRoutine;
 
         Data threadData = new Data.Builder().putString("function", "end")
