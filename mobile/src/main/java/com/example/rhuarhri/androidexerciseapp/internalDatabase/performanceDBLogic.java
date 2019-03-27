@@ -22,8 +22,6 @@ public class performanceDBLogic {
 
     private result returnResult = new result();
 
-
-
     public performanceDBLogic(Context context)
     {
         performanceDB = Room.databaseBuilder(context, performanceDBAccess.class, "performanceData").build();
@@ -63,8 +61,6 @@ public class performanceDBLogic {
 
             performanceDB.storedPerformance().AddNewPerformance(newPerformance);
 
-            //Log.d("Message:", "No data in data base");
-
             success();
         }
         else
@@ -75,7 +71,6 @@ public class performanceDBLogic {
 
     public Data getAllPerformance()
     {
-
         allPerformanceData = performanceDB.storedPerformance().getAll();
 
         Data performanceData;

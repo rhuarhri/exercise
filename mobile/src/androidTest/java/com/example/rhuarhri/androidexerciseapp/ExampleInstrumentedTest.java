@@ -59,7 +59,6 @@ public class ExampleInstrumentedTest {
     @Test
     public void chosenExerciseFinishExercises()throws Exception
     {
-
         chosenExerciseDBLogic test = new chosenExerciseDBLogic(ExerciseDB);
 
         test.addExercise("arm", "test", "test", 4,6, 2, 60000);
@@ -82,7 +81,6 @@ public class ExampleInstrumentedTest {
     @Test
     public void chosenExerciseRemoveExercise()throws Exception
     {
-
         chosenExerciseDBLogic test = new chosenExerciseDBLogic(ExerciseDB);
 
         test.addExercise("arm", "test", "test", 4,6, 2, 60000);
@@ -153,14 +151,11 @@ public class ExampleInstrumentedTest {
         int expectedChestPerformance = 3;//bad performance
         int chestResult = performanceData.getInt("leg",0);
         assertEquals(expectedChestPerformance, chestResult);
-
-
     }
 
     @Test
     public void addLegPerformance()
     {
-
         performanceDBLogic test = new performanceDBLogic(performanceDB);
 
         test.increasePerformance("leg");
@@ -196,8 +191,6 @@ public class ExampleInstrumentedTest {
 
         assertEquals(expected, result);
     }
-
-
 
     @Test
     public void calculatePerformance()
@@ -285,11 +278,4 @@ public class ExampleInstrumentedTest {
         assertEquals(expectedCurrentWeight, currentWeightResult);
 
     }
-
-
-
-
-
-
-
 }

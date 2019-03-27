@@ -6,8 +6,6 @@ import static junit.framework.Assert.assertEquals;
 
 public class unitTestsForWatch {
 
-
-
     @Test
     public void PerformanceHeartRateBelowMinimumValue()
     {
@@ -25,8 +23,6 @@ public class unitTestsForWatch {
         WatchActivity testWatch = new WatchActivity();
         int result = testWatch.calculatePerformance(120, 0);
 
-
-
         int expected = 0;
 
         assertEquals(expected, result);
@@ -37,8 +33,6 @@ public class unitTestsForWatch {
     {
         WatchActivity testWatch = new WatchActivity();
         int result = testWatch.calculatePerformance(241, 3);
-
-
 
         int expected = 9;
 
@@ -62,6 +56,4 @@ public class unitTestsForWatch {
 
         assertEquals(expected, result);
     }
-
-
 }

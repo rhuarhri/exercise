@@ -14,7 +14,6 @@ android room library part of the android jet pack library collection
 @Dao
 public interface UserWeightInterface {
 
-
     @Insert
     void add(storedUserWeight newWeight);
 

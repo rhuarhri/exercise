@@ -24,15 +24,10 @@ public class ChooseExerciseActivity extends AppCompatActivity {
     Button startBTN;
     Button chestBTN;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_exercise);
-
-
-
         exerciseList = (RecyclerView) findViewById(R.id.exerciseRV);
 
         setupRecyclerView();
@@ -40,15 +35,10 @@ public class ChooseExerciseActivity extends AppCompatActivity {
         chestBTN = (Button) findViewById(R.id.chestBTN);
         startBTN = (Button) findViewById(R.id.startBTN);
 
-
-
         chestBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
-
+                //this would have been used to limit the exercises to just chest based ones
             }
         });
         startBTN.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +55,6 @@ public class ChooseExerciseActivity extends AppCompatActivity {
 
     private void setupRecyclerView()
     {
-        //exerciseList.setHasFixedSize(true);
 
         exerciseListManager = new LinearLayoutManager(this);
 
@@ -81,11 +70,6 @@ public class ChooseExerciseActivity extends AppCompatActivity {
             Toast.makeText(this, "Exercises not available check internet connection", Toast.LENGTH_SHORT).show();
         }
 
-        /*
-        exerciseListAdapter = new recyclerViewAdapter();
-        exerciseList.setAdapter(exerciseListAdapter);*/
     }
-
-
 
 }

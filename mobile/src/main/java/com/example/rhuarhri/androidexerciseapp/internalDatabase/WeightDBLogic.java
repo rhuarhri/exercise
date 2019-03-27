@@ -19,8 +19,6 @@ public class WeightDBLogic {
 
     private result returnResult = new result();
 
-
-
     public WeightDBLogic(Context context)
     {
         weightDB = Room.databaseBuilder(context, weightDBAccess.class, "weightData" ).build();
@@ -78,14 +76,6 @@ public class WeightDBLogic {
         return new Data.Builder().putDouble("start", startWeight).putDouble("current", currentWeight).build();
 
     }
-
-    /*public double getStartWeight() {
-        return startWeight;
-    }
-
-    public double getCurrentWeight() {
-        return currentWeight;
-    }*/
 
     private void success()
     {

@@ -25,7 +25,6 @@ public class OverStatsActivity extends AppCompatActivity implements LifecycleOwn
 
     OneTimeWorkRequest getCurrentWeight;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,18 +38,10 @@ public class OverStatsActivity extends AppCompatActivity implements LifecycleOwn
 
         getCurrentWeight = new OneTimeWorkRequest.Builder(WeightDBController.class).setInputData(threadData).build();
 
-
         WorkManager.getInstance().enqueue(getCurrentWeight);
 
         threadChecker check = new threadChecker();
         check.start();
-
-
-
-
-
-/**/
-
 
         homeBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +50,7 @@ public class OverStatsActivity extends AppCompatActivity implements LifecycleOwn
 
                 startActivity(homeScreen);
 
-                //getThreadResult();
+
             }
         });
 
@@ -112,12 +103,12 @@ public class OverStatsActivity extends AppCompatActivity implements LifecycleOwn
                     }
                     else
                     {
-                        //Toast.makeText(getApplicationContext(), "ERROR: " + error, Toast.LENGTH_SHORT).show();
+
                     }
 
 
                 } catch (Exception e) {
-                    //Toast.makeText(getApplicationContext(), "Failed to get a result", Toast.LENGTH_SHORT).show();
+
                 }
             }
 
@@ -144,7 +135,6 @@ public class OverStatsActivity extends AppCompatActivity implements LifecycleOwn
         nowPB.setProgress((int) Math.round(currentWeight));
         wasPB.setProgress((int) Math.round(startWeight));
     }
-
 
 }
 

@@ -30,12 +30,10 @@ public class HomeActivity extends AppCompatActivity {
 
     OneTimeWorkRequest addWeight;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
 
         saveBTN = (Button) findViewById(R.id.saveBTN);
 
@@ -47,14 +45,6 @@ public class HomeActivity extends AppCompatActivity {
 
                 double addingWeight = Double.parseDouble(WeightET.getText().toString());
 
-                //WeightDBController saveWeight = new WeightDBController(getApplicationContext());
-
-                /*
-                saveWeight.runOnMainThread("add", addingWeight);
-
-                test(saveWeight);*/
-
-
                 Data threadData = new Data.Builder().putString("function", "add").putDouble("weight", addingWeight)
                         .build();
 
@@ -64,7 +54,6 @@ public class HomeActivity extends AppCompatActivity {
                 WorkManager.getInstance().enqueue(addWeight);
 
                 Toast.makeText(HomeActivity.this, "Weight saved", Toast.LENGTH_SHORT).show();
-
 
                 WorkManager.getInstance().getWorkInfoById(addWeight.getId()).addListener(() ->
                         runOnUiThread(HomeActivity.this::test), new CurrentThreadExecutor());
@@ -81,7 +70,6 @@ public class HomeActivity extends AppCompatActivity {
 
                 startActivity(overallStatsScreen);
 
-
             }
         });
 
@@ -96,33 +84,12 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
     }
-
 
     public void test() {
 
         //after the thread has run this function should be called
-  /*
-        double startWeight;
-
-        double currentWeight;
-
-        weightDBAccess weightDB;
-
-        weightDB = Room.databaseBuilder(getApplicationContext(), weightDBAccess.class, "weightData").allowMainThreadQueries().build();
-
-
-        List<storedUserWeight> storedData = weightDB.storedWeight().getAll();
-
-        startWeight = storedData.get(0).getStartWeight();
-
-        currentWeight = storedData.get(0).getCurrentWeight();
-
-
-        Toast.makeText(this, "Start weight: " + startWeight + " current weight: " + currentWeight, Toast.LENGTH_LONG).show();
-
-*/
+        //caused problems during development
     }
 
     class CurrentThreadExecutor implements Executor {

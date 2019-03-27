@@ -43,5 +43,4 @@ public class StartActivity extends WearableActivity {
         startActivity(goTo);
     }
 
-
 }

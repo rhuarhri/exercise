@@ -24,13 +24,11 @@ import androidx.work.WorkManager;
 
 public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapter.MyViewHolder> {
 
-
-
     List<String> FoundNames;
     List<String> FoundType;
     Context context;
 
-
+    //Exercise list comes from fire store
     public recyclerViewAdapter (List<exercise> ExerciseList, Context appContext)
     {
         List<exercise> allExercises = ExerciseList;
@@ -47,7 +45,6 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
         }
 
     }
-
 
     public static class MyViewHolder extends RecyclerView.ViewHolder
     {
@@ -76,8 +73,6 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
 
         MyViewHolder vh = new MyViewHolder(v);
-
-
 
         return vh;
     }
@@ -108,6 +103,7 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
 
                 holder.amountTXT.setText("" + amount);
 
+                //adding the chosen exercise to the internal data base
                 storedExercises addExercise = new storedExercises();
 
                 addExercise.addToExerciseRoutine(FoundNames.get(position));
@@ -137,9 +133,7 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
 
                     holder.amountTXT.setText("" + amount);
 
-
                 }
-
             }
         });
 

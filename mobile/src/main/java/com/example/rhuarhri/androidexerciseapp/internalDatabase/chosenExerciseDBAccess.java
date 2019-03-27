@@ -8,5 +8,4 @@ public abstract class chosenExerciseDBAccess extends RoomDatabase {
 
     public abstract chosenExerciseInterface storedExercises();
 
-
 }

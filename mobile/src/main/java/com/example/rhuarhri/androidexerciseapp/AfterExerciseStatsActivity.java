@@ -33,8 +33,6 @@ public class AfterExerciseStatsActivity extends AppCompatActivity {
 
     protected Handler myHandler;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,10 +66,8 @@ public class AfterExerciseStatsActivity extends AppCompatActivity {
         Data threadData = new Data.Builder().putString("function", "get")
                 .build();
 
-
         getPerformance = new OneTimeWorkRequest.Builder(PerformanceDBController.class)
                 .setInputData(threadData).build();
-
 
         WorkManager.getInstance().enqueue(getPerformance);
 
@@ -80,13 +76,19 @@ public class AfterExerciseStatsActivity extends AppCompatActivity {
 
         checker.start();
 
-        //get average heart rate
+        //get average heart rate from smart watch
 
         myHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 Bundle stuff = msg.getData();
-                messageText(stuff.getString("messageText"));
+                String newinfo = stuff.getString("messageText");
+
+                if (!newinfo.isEmpty() || newinfo != "") {
+                    averageHeartRateTXT.setText(newinfo);
+
+                }
+
                 return true;
             }
         });
@@ -97,8 +99,6 @@ public class AfterExerciseStatsActivity extends AppCompatActivity {
 
         new MessageHandler(getApplicationContext(), AfterExerciseStatsActivity.this,
                 "" + "heart").start();
-
-
 
     }
 
@@ -145,7 +145,6 @@ public class AfterExerciseStatsActivity extends AppCompatActivity {
 
                     int chestPerformance = WorkManager.getInstance().getWorkInfoById(getPerformance.getId()).get().getOutputData().getInt("chest", 9);
 
-                    displayPerformance(legPerformance, armPerformance, chestPerformance);
 
             }
             else
@@ -159,19 +158,6 @@ public class AfterExerciseStatsActivity extends AppCompatActivity {
         }
     }
 
-    private void displayPerformance(int leg, int arm, int chest)
-    {
-        caloriesTXT.setText("L: " + leg + " A: " + arm + " C: " + chest);
-    }
-
-    public void messageText(String newinfo) {
-        if (!newinfo.isEmpty() || newinfo != "") {
-            averageHeartRateTXT.setText(newinfo);
-
-        }
-    }
-
-    //Define a nested class that extends BroadcastReceiver//
 
     public class Receiver extends BroadcastReceiver {
         @Override
@@ -179,10 +165,7 @@ public class AfterExerciseStatsActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
 
             try{
-
                 averageHeartRateTXT.setText(intent.getStringExtra("message"));
-
-
             }
             catch(Exception e)
             {
@@ -190,8 +173,6 @@ public class AfterExerciseStatsActivity extends AppCompatActivity {
             }
         }
     }
-
-
 
 }
 

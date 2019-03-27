@@ -17,33 +17,18 @@ provided by android jet pack library
 
 public class WeightDBController extends Worker {
 
-    //private double startWeight = 0;
-    //private double currentWeight = 0;
-    //private weightDBAccess weightDB;
-
-    /*
-    private Context appContext;
-
-    public WeightDBController(Context context)
-    {
-        appContext = context;
-    }*/
 
     private WeightDBLogic DBLogic;
 
     private Result threadResult = Worker.Result.failure();
 
-
     public WeightDBController(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
 
-
     @NonNull
     @Override
     public Result doWork() {
-
-        //weightDB = Room.databaseBuilder(getApplicationContext(), weightDBAccess.class, "weightData" ).build();
 
         DBLogic = new WeightDBLogic(getApplicationContext());
 
@@ -101,83 +86,4 @@ public class WeightDBController extends Worker {
             threadResult = Worker.Result.failure(errorData);
         }
     }
-
-/*
-    public String runOnMainThread(String Function, double weight)
-    {
-        weightDB = Room.databaseBuilder(appContext, weightDBAccess.class, "weightData" ).allowMainThreadQueries().build();
-
-        double inputWeight = weight;
-        String function = Function;
-
-        if (inputWeight <= 0)
-        {
-
-            return "weight can not be 0";
-
-        }
-        else
-        {
-            if (function.equals("add"))
-            {
-                addWeight(inputWeight);
-            }
-            else if (function.equals("get"))
-            {
-                getStoredWeight();
-            }
-            else
-            {
-
-                return "this function does not exist";
-
-
-            }
-        }
-
-        return "successful";
-    }*/
-
-/*
-    private void addWeight(double Weight)
-    {
-        List<storedUserWeight> existingData = weightDB.storedWeight().getAll();
-
-        if (existingData.isEmpty() == true)
-        {
-            //there is no data in the data base so a start weight can be added
-            storedUserWeight newData = new storedUserWeight();
-            newData.setCurrentWeight(Weight);
-            newData.setStartWeight(Weight);
-
-            weightDB.storedWeight().add(newData);
-        }
-        else
-        {
-            weightDB.storedWeight().addCurrentWeight(Weight);
-        }
-
-        threadResult = Worker.Result.success();
-    }
-
-    private void getStoredWeight()
-    {
-
-
-        List<storedUserWeight> storedData = weightDB.storedWeight().getAll();
-
-        startWeight = storedData.get(0).getStartWeight();
-
-        currentWeight = storedData.get(0).getCurrentWeight();
-
-
-    }
-
-    public double getStartWeight() {
-        return startWeight;
-    }
-
-    public double getCurrentWeight() {
-        return currentWeight;
-    }*/
 }

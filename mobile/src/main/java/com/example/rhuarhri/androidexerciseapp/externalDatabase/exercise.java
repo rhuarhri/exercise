@@ -9,6 +9,8 @@ public class exercise {
     int maxperformance;
     long time;
 
+    //getters and setters
+
     public String getName() {
         return name;
     }

@@ -24,6 +24,8 @@ public class storedUserPerformance {
     @ColumnInfo(name = "chest")
     int timesExercisingChest;
 
+    //getters and setters
+
     @NonNull
     public int getId() {
         return id;

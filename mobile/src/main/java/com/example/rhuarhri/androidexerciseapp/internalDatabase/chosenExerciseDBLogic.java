@@ -19,14 +19,12 @@ public class chosenExerciseDBLogic {
 
     private result returnResult = new result();
 
-
-
     public chosenExerciseDBLogic(Context context)
     {
         ExerciseDB = Room.databaseBuilder(context, chosenExerciseDBAccess.class, "ExerciseData").build();
     }
 
-    //for testing
+    //used in unit testing
     public chosenExerciseDBLogic(chosenExerciseDBAccess TestDB)
     {
         ExerciseDB = TestDB;
@@ -59,8 +57,6 @@ public class chosenExerciseDBLogic {
             Log.d("ERROR", "Each exercise must have a name");
 
             failure("Each exercise must have a name");
-
-
         }
         else if(ImageName.equals(""))
         {
@@ -124,18 +120,14 @@ public class chosenExerciseDBLogic {
     public void removeAllExercises()
     {
         ExerciseDB.storedExercises().deleteAll();
-
-
         success();
     }
 
     public void removeOneExercise(String exerciseName)
     {
         ExerciseDB.storedExercises().deteleOneExercise(exerciseName);
-
         success();
     }
-
 
     private void success()
     {

@@ -12,8 +12,6 @@ public class completeActivity extends AppCompatActivity {
     Button homeBTN;
     Button statsBTN;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +21,7 @@ public class completeActivity extends AppCompatActivity {
         exitBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //would have closed the app
             }
         });
 

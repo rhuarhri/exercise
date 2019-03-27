@@ -22,7 +22,7 @@ public class MessageHandler extends Thread {
 
 
 
-    protected Handler myHandler;
+    //protected Handler myHandler;
 
     String path = "";
     String message = "";
@@ -35,7 +35,7 @@ public class MessageHandler extends Thread {
         currentActivity = activity;
         path = context.getString(R.string.path);
         message = Message;
-
+/*
         myHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
@@ -43,42 +43,15 @@ public class MessageHandler extends Thread {
                 //messageText(stuff.getString("messageText"));
                 return true;
             }
-        });
+        });*/
 
         IntentFilter messageFilter = new IntentFilter(Intent.ACTION_SEND);
         Receiver messageReceiver = new Receiver();
         LocalBroadcastManager.getInstance(appContext).registerReceiver(messageReceiver, messageFilter);
     }
 
-    /*
-    public void sendmessage(String messageText) {
-        Bundle bundle = new Bundle();
-        bundle.putString("messageText", messageText);
-        Message msg = myHandler.obtainMessage();
-        msg.setData(bundle);
-        myHandler.sendMessage(msg);
-
-    }*/
-
-    /*
-    public void SendMessage(String Path, String Message)
-    {
-
-        path = Path;
-        message = Message;
-
-    }*/
-
-    /*
-    public void watchSendMessage()
-    {
-
-    }*/
-
 
     public void run() {
-
-
 
         Task<List<Node>> wearableList =
                 Wearable.getNodeClient(appContext).getConnectedNodes();
@@ -87,12 +60,8 @@ public class MessageHandler extends Thread {
             List<Node> nodes = Tasks.await(wearableList);
             for (Node node : nodes) {
                 Task<Integer> sendMessageTask =
-
-
-
                         Wearable.getMessageClient(currentActivity).sendMessage(node.getId(), path, message.getBytes());
-
-                try {
+                /*try {
 
 
 
@@ -107,7 +76,7 @@ public class MessageHandler extends Thread {
 
 
 
-                }
+                }*/
 
             }
 
@@ -135,10 +104,6 @@ public class MessageHandler extends Thread {
             This is not used as activities that handle messages have their own receiver
 
              */
-
-
-
-
 
         }
     }

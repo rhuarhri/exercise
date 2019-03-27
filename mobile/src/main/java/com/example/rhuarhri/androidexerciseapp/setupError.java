@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/*
 public class setupError extends Fragment {
 
     @Nullable
@@ -16,4 +17,4 @@ public class setupError extends Fragment {
 
         return inflater.inflate(R.layout.error_activity, container, false);
     }
-}
+}*/

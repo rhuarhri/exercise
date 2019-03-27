@@ -46,7 +46,6 @@ public class StartActivity extends AppCompatActivity {
         }.start();
     }
 
-
     private void goToSetupScreen()
     {
         Intent setupScreen = new Intent(getApplicationContext(), HomeActivity.class);

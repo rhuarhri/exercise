@@ -44,7 +44,6 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
 
     protected Handler messageHandler;
 
-
     boolean paused = false;
     periodicUpdater updater;
 
@@ -63,12 +62,6 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
     private float currentMovement;
     private boolean stopSending = false;
 
-    //public for testing
-    public int currentPerformanceLevel;
-    private boolean okToSend;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +76,6 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
 
         healthSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         healthSensorManager.registerListener(this, heartRateSensor, SensorManager.SENSOR_DELAY_NORMAL);
-
 
         // Enables Always-on
         setAmbientEnabled();
@@ -132,14 +124,9 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
                         new MessageHandler(getApplicationContext(), WatchActivity.this, "1").start();
                     }
                     Log.d("Performance", "performance is 1");
-
                 }
-
             }
         });
-
-
-
     }
 
     public void messageText(String newinfo) {
@@ -148,11 +135,8 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
             {
                 sendAverageHeartRate();
             }
-
         }
     }
-
-
 
     public class Receiver extends BroadcastReceiver {
         @Override
@@ -160,14 +144,12 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
         public void onReceive(Context context, Intent intent) {
 
             try{
-
                 String newinfo = intent.getStringExtra("message");
 
                 if (newinfo.equals("heart"))
                 {
                     sendAverageHeartRate();
                 }
-
 
             }
             catch(Exception e)
@@ -190,33 +172,24 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
 
-
         if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
         {
             currentMovement = sensorEvent.values[0];
-
         }
         else
         {
             currentHeartRate = sensorEvent.values[0];
             heartRateTXT.setText("" + currentHeartRate);
-            //HeartRateOverTime.addHeartRate(currentHeartRate);
         }
-
-        //sensorData = sensorEvent;
 
         if (UpdateSensorData == true) {
             updater = new periodicUpdater();
             updater.start();
 
-
             if (paused == false) {
-
                 new MessageHandler(getApplicationContext(), WatchActivity.this,
                         "" + calculatePerformance(currentHeartRate, currentMovement)).start();
                 Log.d("Performance", "performance is " + calculatePerformance(currentHeartRate, currentMovement));
-
-
             } else {
 
                 if (stopSending == false) {
@@ -235,77 +208,52 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
 
     public int calculatePerformance(float heartRate, float movement)
     {
-
-
         if (isMoving(movement) == true) {
 
             if(heartRate < 60)
             {
                 return 0;
-
-
-
             }
             else if (heartRate > 60 && heartRate < 80)
             {
                 return 1;
-
-
             }
             else if (heartRate > 80 && heartRate < 100)
             {
                 return 2;
-
-
             }
             else if (heartRate > 100 && heartRate < 120)
             {
                 return 3;
-
-
             }
             else if (heartRate > 120 && heartRate < 140)
             {
                 return 4;
-
-
             }
             else if (heartRate > 140 && heartRate < 160)
             {
                 return 5;
-
-
             }
             else if (heartRate > 160 && heartRate < 180)
             {
                 return 6;
-
-
             }
             else if (heartRate > 180 && heartRate < 200)
             {
                 return 7;
-
-
             }
             else if (heartRate > 200 && heartRate < 220)
             {
                 return 8;
-
-
             }
             else if (heartRate > 220)
             {
                 return 9;
-
-
             }
-
         }
         else
         {
             return 0;
-
 
         }
 
@@ -333,36 +281,17 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
     private class periodicUpdater extends Thread
     {
 
-
         public periodicUpdater() {
 
             UpdateSensorData = false;
-
-
         }
 
         public void run()
         {
-
                 try {
                     Thread.sleep(500);
 
-                    /*
-                    if (sensorData.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
-                    {
-                        currentMovement = sensorData.values[0];
-
-                    }
-                    else
-                    {
-                        currentHeartRate = sensorData.values[0];
-                        heartRateTXT.setText("" + currentHeartRate);
-                        HeartRateOverTime.addHeartRate(currentHeartRate);
-                    }*/
-
                     HeartRateOverTime.addHeartRate(currentHeartRate);
-
-
 
                     UpdateSensorData = true;
 
@@ -371,8 +300,5 @@ public class WatchActivity extends WearableActivity implements SensorEventListen
                 }
 
         }
-
     }
-
-
 }

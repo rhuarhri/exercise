@@ -24,6 +24,8 @@ public class storedUserWeight {
     @ColumnInfo(name = "current")
     double currentWeight;
 
+    //getters and setters
+
     @NonNull
     public int getId() {
         return id;

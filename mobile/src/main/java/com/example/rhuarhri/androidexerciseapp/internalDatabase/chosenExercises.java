@@ -33,6 +33,8 @@ public class chosenExercises {
     @ColumnInfo(name = "time")
     long time;
 
+    //getters and setters
+
     @NonNull
     public int getId() {
         return id;

@@ -33,7 +33,6 @@ public class storedExercises {
 
     public void getAllExercises(final RecyclerView QuizRV, final Context context) throws Exception
     {
-
         try {
                 db.collection("exercises").get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -46,15 +45,13 @@ public class storedExercises {
                                             existingExercises.add(currentExercise);
                                         }
                                     }
-
+                                    //add exercises from fire store to recycler view
                                     RecyclerView.Adapter quizListAdapter = new recyclerViewAdapter(existingExercises, context);
 
                                     QuizRV.setAdapter(quizListAdapter);
                                 }
                             }
                         });
-                /**/
-
 
             } catch (Exception e) {
 
@@ -87,13 +84,9 @@ public class storedExercises {
                                     OneTimeWorkRequest addExercise = new OneTimeWorkRequest.Builder(chosenExerciseDBController.class)
                                             .setInputData(threadData).build();
 
-
                                     WorkManager.getInstance().enqueue(addExercise);
                                 }
-
                             }
-
-
                         }
                     }
                 });

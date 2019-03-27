@@ -27,13 +27,8 @@ public class MessageHandler extends Thread {
     it goes to each device that is connected to the device it is on.
     What it is looking for is an app running on a connected device that has a key
     that it is looking for.
-
-
      */
 
-
-
-    protected Handler myHandler;
     /*
     The path identifies the message and allows the message to be found when sent.
     All paths values must start with a / for example /my_path
@@ -50,51 +45,11 @@ public class MessageHandler extends Thread {
         path = context.getString(R.string.path);
         message = Message;
 
-        myHandler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
-                Bundle stuff = msg.getData();
-                //messageText(stuff.getString("messageText"));
-                return true;
-            }
-        });
-
         IntentFilter messageFilter = new IntentFilter(Intent.ACTION_SEND);
         MessageHandler.Receiver messageReceiver = new MessageHandler.Receiver();
         LocalBroadcastManager.getInstance(appContext).registerReceiver(messageReceiver, messageFilter);
     }
-
-    /*
-
-    public void sendmessage(String messageText) {
-        Bundle bundle = new Bundle();
-        bundle.putString("messageText", messageText);
-        Message msg = myHandler.obtainMessage();
-        msg.setData(bundle);
-        myHandler.sendMessage(msg);
-
-    }
-
-
-    public void SendMessage(String Path, String Message)
-    {
-
-        path = Path;
-        message = Message;
-
-    }
-
-
-    public void watchSendMessage()
-    {
-
-    }*/
-
-
     public void run() {
-
-//Retrieve the connected devices, known as nodes//
-
         Task<List<Node>> wearableList =
                 Wearable.getNodeClient(appContext).getConnectedNodes();
         try {
@@ -102,12 +57,9 @@ public class MessageHandler extends Thread {
             List<Node> nodes = Tasks.await(wearableList);
             for (Node node : nodes) {
                 Task<Integer> sendMessageTask =
-
-//Send the message//
-
                         Wearable.getMessageClient(currentActivity).sendMessage(node.getId(), path, message.getBytes());
 
-                try {
+                /*try {
 
                     Integer result = Tasks.await(sendMessageTask);
                     //sendmessage("I just sent the wearable a message " + sentMessageNumber++);
@@ -122,36 +74,28 @@ public class MessageHandler extends Thread {
 
 
 
-                }
+                }*/
 
             }
 
         } catch (ExecutionException exception) {
 
-
-
         } catch (InterruptedException exception) {
 
-
         }
-
     }
-
 
     public class Receiver extends BroadcastReceiver {
         @Override
 
         public void onReceive(Context context, Intent messageData) {
-
-            /*
+        /*
             A message that is received from another device comes from the
             MessageService and is stored in the intent.
+
+            This is not used as activities that handle messages have their own receiver
+
              */
-
-
-
-
-
         }
     }
 

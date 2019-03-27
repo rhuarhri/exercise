@@ -44,6 +44,4 @@ public interface UserPerformanceInterface {
     @Query("SELECT duration FROM storedUserPerformance")
     List<Long> getStartTime();
 
-
-
 }

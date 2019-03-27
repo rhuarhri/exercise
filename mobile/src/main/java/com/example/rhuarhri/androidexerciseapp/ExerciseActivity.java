@@ -35,10 +35,6 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 public class ExerciseActivity extends AppCompatActivity {
-
-
-    //TODO calculate time for the exercises
-
         protected Handler messageHandler;
         signalLossTimer checkSignal = new signalLossTimer();
         boolean checkingForSignal = true;
@@ -49,16 +45,12 @@ public class ExerciseActivity extends AppCompatActivity {
         FragmentManager fragmentManager;
         FragmentTransaction fragmentTransaction;
 
-        int currentExerciseLocation = 0;
         int performance = 0;
         //int oldPerformance;
         boolean performanceUpdated = true;
         int minPerformance = 1;
         int maxPerformance = 5;
 
-        boolean fragmentDisplayed = false;
-        boolean Displayed = false;
-        boolean hidden = false;
         MediaPlayer goodJobAudio;
         MediaPlayer tooSlowAudio;
         MediaPlayer tooFastAudio;
@@ -79,8 +71,6 @@ public class ExerciseActivity extends AppCompatActivity {
         notificationIV = (ImageView) findViewById(R.id.notificationIV);
         exerciseProgress = (ProgressBar) findViewById(R.id.exercisePB);
 
-
-
         fragmentManager = getSupportFragmentManager();
         pauseFragement = (exercisePause) fragmentManager.findFragmentById(R.id.pauseFRG);
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -96,7 +86,13 @@ public class ExerciseActivity extends AppCompatActivity {
         @Override
         public boolean handleMessage(Message msg) {
                 Bundle stuff = msg.getData();
-                messageText(stuff.getString("messageText"));
+                String newinfo = stuff.getString("messageText");
+            if (!newinfo.isEmpty() || newinfo != "") {
+                performance = Integer.parseInt(newinfo);
+                performanceUpdated = true;
+
+            }
+
                 return true;
             }
         });
@@ -109,27 +105,15 @@ public class ExerciseActivity extends AppCompatActivity {
 
         mediaSetUp();
 
-
         getExercises();
 
-        //Log.d("MESSAGE", "Time is " + time);
-
         exerciseTime(time);
-
 
         checkSignal.start();
 
 }
 
 
-    public void messageText(String newinfo) {
-        if (!newinfo.isEmpty() || newinfo != "") {
-            performance = Integer.parseInt(newinfo);
-            performanceUpdated = true;
-            //Log.d("RECEIVED PERFORMANCE", "current performance is " + performance);
-            //performanceChangeHandler();
-        }
-    }
 
     //Define a nested class that extends BroadcastReceiver//
 
@@ -142,7 +126,7 @@ public class ExerciseActivity extends AppCompatActivity {
 
                 performance = Integer.parseInt(intent.getStringExtra("message"));
                 performanceUpdated = true;
-                //Log.d("RECEIVED PERFORMANCE", "received performance is " + performance);
+
                 performanceChangeHandler();
             }
             catch(Exception e)
@@ -189,33 +173,22 @@ public class ExerciseActivity extends AppCompatActivity {
                 Data threadData = new Data.Builder().putString("function", type)
                         .build();
 
-
+                //records that the use has done these exercises so performance should be updated
                 addExercise = new OneTimeWorkRequest.Builder(PerformanceDBController.class)
                         .setInputData(threadData).build();
 
 
                 WorkManager.getInstance().enqueue(addExercise);
 
-
-
             }
 
             time = exerciseTime;
-            Log.d("MESSAGE", "Time is " + time);
-
 
         }
 
         private void performanceChangeHandler()
         {
             int newPerformance = performance;
-            //int OldPerformance = oldPerformance;
-
-/*
-            if (newPerformance == OldPerformance) {
-
-            }
-            else {*/
 
                 Log.d("Performance", "performance is "+newPerformance);
                 if (newPerformance <= 0) {
@@ -227,7 +200,6 @@ public class ExerciseActivity extends AppCompatActivity {
                 } else {
                     if (pauseFragement.isHidden() == false) {
 
-                        //TODO find a way to hide the fragment when the performance changes
                         fragmentTransaction.hide(pauseFragement);
                         fragmentTransaction.commitNow();
 
@@ -257,7 +229,6 @@ public class ExerciseActivity extends AppCompatActivity {
                     displayNotifications++;
                 }
 
-            //oldPerformance = newPerformance;
         }
 
 
@@ -275,7 +246,6 @@ public class ExerciseActivity extends AppCompatActivity {
                 while (checkingForSignal == true)
                 {
                     try {
-
 
                         if (performanceUpdated == true) {
                             performanceUpdated = false;
@@ -295,8 +265,6 @@ public class ExerciseActivity extends AppCompatActivity {
 
                     }
                 }
-
-
 
             }
         }
@@ -332,15 +300,11 @@ public class ExerciseActivity extends AppCompatActivity {
                 else if (performance == 0)
                 {
                     //do nothing
-
                 }
                 else {
-
                     pauseTime++;
-
                 }
             }
-
 
         }
 
@@ -351,17 +315,9 @@ public class ExerciseActivity extends AppCompatActivity {
             CountDownTimer exerciseTimer = new CountDownTimer(Time, 500) {
                 @Override
                 public void onTick(long l) {
-
-
-
-
                     exerciseProgress.setProgress(((int) Time -(int) l));
 
                     changeImage();
-
-
-
-
 
                 }
 
@@ -373,15 +329,11 @@ public class ExerciseActivity extends AppCompatActivity {
                 }
             }.start();
 
-
-
-
         }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
 
         OneTimeWorkRequest removeExerciseRoutine;
 
@@ -391,7 +343,6 @@ public class ExerciseActivity extends AppCompatActivity {
 
         removeExerciseRoutine = new OneTimeWorkRequest.Builder(chosenExerciseDBController.class)
                 .setInputData(threadData).build();
-
 
         WorkManager.getInstance().enqueue(removeExerciseRoutine);
     }
